@@ -1,0 +1,2176 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "d428eef5-a0e0-43a5-bee0-745be1728a99")
+	(paper "A4")
+	(lib_symbols
+		(symbol "E22-900M30S_1"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -12.7 16.002 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Value" "E22-900M30S"
+				(at -12.7 -17.78 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Footprint" "E22-900M30S:XCVR_E22-900M30S"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "MF" "EBYTE"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MAXIMUM_PACKAGE_HEIGHT" "3.97 mm"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Package" "Package"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Price" "None"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Check_prices" "https://www.snapeda.com/parts/E22-900M30S/EBYTE/view-part/?ref=eda"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "STANDARD" "Manufacturer Recommendations"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "PARTREV" "1.2"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "SnapEDA_Link" "https://www.snapeda.com/parts/E22-900M30S/EBYTE/view-part/?ref=snap"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MP" "E22-900M30S"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Description_1" "SX1262 868/915 MHz 1w SPI LoRa Module"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Availability" "Not in stock"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MANUFACTURER" "EBYTE"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(symbol "E22-900M30S_1_0_0"
+				(rectangle
+					(start -12.7 -15.24)
+					(end 12.7 15.24)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin input line
+					(at -17.78 10.16 0)
+					(length 5.08)
+					(name "~{RST}"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "15"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -17.78 5.08 0)
+					(length 5.08)
+					(name "MOSI"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "17"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at -17.78 2.54 0)
+					(length 5.08)
+					(name "MISO"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "16"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -17.78 0 0)
+					(length 5.08)
+					(name "SCK"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "18"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -17.78 -2.54 0)
+					(length 5.08)
+					(name "NSS"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "19"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -17.78 -7.62 0)
+					(length 5.08)
+					(name "RXEN"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -17.78 -10.16 0)
+					(length 5.08)
+					(name "TXEN"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 12.7 180)
+					(length 5.08)
+					(name "VCC"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 12.7 180)
+					(length 5.08)
+					(name "VCC"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 7.62 180)
+					(length 5.08)
+					(name "ANT"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "21"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 2.54 180)
+					(length 5.08)
+					(name "BUSY"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 17.78 -2.54 180)
+					(length 5.08)
+					(name "DIO1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 17.78 -5.08 180)
+					(length 5.08)
+					(name "DIO2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 -12.7 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 -12.7 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 -12.7 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 -12.7 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 -12.7 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "20"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 -12.7 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "22"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 -12.7 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 -12.7 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 -12.7 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "SMA-J-P-X-ST-MT1:SMA-J-P-X-ST-MT1"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at -3.81 4.064 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Value" "SMA-J-P-X-ST-MT1"
+				(at -4.064 -4.318 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Footprint" "SMA-J-P-X-ST-MT1:SAMTEC_SMA-J-P-X-ST-MT1"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "MF" "Samtec"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MAXIMUM_PACKAGE_HEIGHT" "8.08mm"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Package" "None"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Price" "None"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Check_prices" "https://www.snapeda.com/parts/SMA-J-P-H-ST-MT1/Samtec+Inc./view-part/?ref=eda"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "STANDARD" "Manufacturer Recommendations"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "PARTREV" "D"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "SnapEDA_Link" "https://www.snapeda.com/parts/SMA-J-P-H-ST-MT1/Samtec+Inc./view-part/?ref=snap"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MP" "SMA-J-P-H-ST-MT1"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Description_1" "SMA Connector Jack, Female Socket 50 Ohms Surface Mount, Through Hole Solder"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "Availability" "In Stock"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(property "MANUFACTURER" "Samtec"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+					(hide yes)
+				)
+			)
+			(symbol "SMA-J-P-X-ST-MT1_0_0"
+				(polyline
+					(pts
+						(xy -3.302 3.302) (xy -2.54 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.302 1.778) (xy -2.54 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.302 0.762) (xy -2.54 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.302 -0.762) (xy -2.54 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 2.54) (xy 2.54 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 0) (xy 0 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.016 1.524) (xy 0 1.524)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.762 -0.762) (xy -1.27 -1.524)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 2.54)
+					(radius 1.016)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 1.524) (xy 0 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 1.524) (xy 1.016 1.524)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy -2.286 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 0)
+					(radius 0.254)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -0.762) (xy -0.762 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -0.762) (xy -0.508 -1.524)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -0.762) (xy 0.762 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 -0.762) (xy 0.254 -1.524)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 0 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 2.54 2.54 180)
+					(length 5.08)
+					(name "~"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 0 180)
+					(length 5.08)
+					(name "~"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 0 180)
+					(length 5.08)
+					(name "~"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 0 180)
+					(length 5.08)
+					(name "~"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 0 180)
+					(length 5.08)
+					(name "~"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "power:+3.3V"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "+3.3V"
+				(at 0 3.556 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+3.3V_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+3.3V_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text "Azul - Comunicação SPI\nAmarelo - Controle de Modo\nLaranja - Monitoramento de Estado\nPreto - Interrupção de Recepção"
+		(exclude_from_sim no)
+		(at 159.004 55.626 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "02e0e84d-bbc7-4c79-9c53-5dda206ad7b3")
+	)
+	(no_connect
+		(at 97.79 109.22)
+		(uuid "15899980-2e2f-4398-b4e1-5d45f5152ef6")
+	)
+	(no_connect
+		(at 97.79 96.52)
+		(uuid "1a1cc01c-5fdf-4187-974c-fe0f85ae180b")
+	)
+	(no_connect
+		(at 264.16 59.69)
+		(uuid "22271034-8c00-457f-8ddc-9ba12f6f9209")
+	)
+	(no_connect
+		(at 97.79 119.38)
+		(uuid "265f48cf-e831-4aa1-97ac-0d181c513ea0")
+	)
+	(no_connect
+		(at 97.79 88.9)
+		(uuid "2c257d4e-376b-4dbc-969b-5056747e3ae0")
+	)
+	(no_connect
+		(at 97.79 121.92)
+		(uuid "36f03078-d7f9-418f-ab84-3f6a68346263")
+	)
+	(no_connect
+		(at 46.99 119.38)
+		(uuid "3859b750-7620-4f1b-812d-bd99cfb7f652")
+	)
+	(no_connect
+		(at 97.79 116.84)
+		(uuid "52becd5d-4cf6-46ca-88ab-c5d0234761a5")
+	)
+	(no_connect
+		(at 46.99 114.3)
+		(uuid "5d98af64-9979-4bbf-933e-5f7c4780b5ce")
+	)
+	(no_connect
+		(at 46.99 116.84)
+		(uuid "60332515-3056-4897-be49-11098e254189")
+	)
+	(no_connect
+		(at 97.79 99.06)
+		(uuid "8669b61a-1411-4899-b7aa-60814c7518b0")
+	)
+	(no_connect
+		(at 46.99 101.6)
+		(uuid "a25fb2ed-5c24-45a6-b57d-d7850471ef22")
+	)
+	(no_connect
+		(at 46.99 111.76)
+		(uuid "a8d958e8-9879-44ec-8024-79fc214d176e")
+	)
+	(no_connect
+		(at 46.99 73.66)
+		(uuid "ae486da0-d4d3-4be6-98cb-8d9e38d0f378")
+	)
+	(no_connect
+		(at 97.79 111.76)
+		(uuid "c3535f83-82f1-459b-93dc-005a0ab1b8d9")
+	)
+	(no_connect
+		(at 46.99 76.2)
+		(uuid "c542a3a9-23ef-4476-9ec6-d50c68ce8df0")
+	)
+	(no_connect
+		(at 46.99 71.12)
+		(uuid "ccf0f003-9554-4dbb-9c82-1d04715c4768")
+	)
+	(no_connect
+		(at 46.99 109.22)
+		(uuid "d5ae1b1d-7d31-4fb7-a861-e521d2e436ce")
+	)
+	(no_connect
+		(at 97.79 101.6)
+		(uuid "df95194e-2a06-4a0b-bce1-e26c92a9ceed")
+	)
+	(no_connect
+		(at 97.79 106.68)
+		(uuid "e3b6e509-13e1-4871-b5c2-cd01973723a3")
+	)
+	(no_connect
+		(at 97.79 81.28)
+		(uuid "f06e0082-7ac5-4983-a167-989195a38be6")
+	)
+	(wire
+		(pts
+			(xy 186.69 64.77) (xy 201.93 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 45 168 255 1)
+		)
+		(uuid "0c3a16f0-99d8-4bce-afce-5b63c5ab3b75")
+	)
+	(wire
+		(pts
+			(xy 237.49 69.85) (xy 252.73 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "25f31dc5-9d0c-42fd-a473-9842aaeab24c")
+	)
+	(wire
+		(pts
+			(xy 40.64 68.58) (xy 46.99 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4696d484-3af6-4ad6-acf3-29e235bfb212")
+	)
+	(wire
+		(pts
+			(xy 255.27 67.31) (xy 237.49 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 0 0 0 1)
+		)
+		(uuid "5e506c16-c79a-433f-9944-70d6b9f96ef6")
+	)
+	(wire
+		(pts
+			(xy 186.69 67.31) (xy 201.93 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 11 215 255 1)
+		)
+		(uuid "66a4e0c2-0ed9-4c8f-9179-96a476ba091b")
+	)
+	(wire
+		(pts
+			(xy 190.5 54.61) (xy 201.93 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+			(color 255 189 42 1)
+		)
+		(uuid "7711aa4e-2213-4195-afff-ab55fa36870e")
+	)
+	(wire
+		(pts
+			(xy 237.49 57.15) (xy 264.16 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8c588bc7-aac4-4004-8f7c-fc2096e66d11")
+	)
+	(wire
+		(pts
+			(xy 46.99 63.5) (xy 46.99 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e481ec7c-3ec4-4cdf-bc5f-5009ef5289bd")
+	)
+	(label "GPIO09_B4"
+		(at 201.93 62.23 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "03c17183-8096-436a-bd59-dee20a189574")
+	)
+	(label "NSS"
+		(at 99.06 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "159da994-bbda-4c06-88f2-bac3183818f7")
+	)
+	(label "DIO1"
+		(at 46.99 104.14 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "21ab2ddc-580e-40a1-b9e2-3ed3a251aa8d")
+	)
+	(label "GPIO17_B2"
+		(at 201.93 74.93 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "21f30d01-3463-4df3-b1cf-d852b93be284")
+	)
+	(label "GPIO27_B1"
+		(at 201.93 72.39 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2ca2ce4d-fb7a-410a-9f0f-925d5f429b15")
+	)
+	(label "RXEN_LORA_A2"
+		(at 41.91 83.82 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "4053b7ad-fcc7-419d-b6b9-7a978da15fa4")
+	)
+	(label "RST"
+		(at 99.06 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "433cc95c-d043-4880-b4b0-a3758f2a6496")
+	)
+	(label "GPIO10_B3"
+		(at 201.93 59.69 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "5d420461-6c6b-4f6b-9755-2b249dcaf088")
+	)
+	(label "SCK"
+		(at 46.99 96.52 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "6010d66c-f2a9-47b8-8a55-b2e936771dd0")
+	)
+	(label "BUSY"
+		(at 46.99 86.36 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "71f45bf3-71e4-4463-b797-997b3875ca5c")
+	)
+	(label "TXEN_LORA_A1"
+		(at 41.91 81.28 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7e7c758d-dce9-4496-b2d3-c88c0ee3517b")
+	)
+	(label "DIO2"
+		(at 46.99 106.68 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a0f3b138-31a7-4cd6-848c-19917369fa27")
+	)
+	(label "MOSI_LORA_A3"
+		(at 41.91 91.44 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ec1ece20-6e46-4cf3-9393-7484ad023fbb")
+	)
+	(label "MISO_LORA_A4"
+		(at 41.91 93.98 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ffa4b361-4efd-4ec3-b53f-83eac6c4f715")
+	)
+	(global_label "GND"
+		(shape input)
+		(at 97.79 124.46 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "106872e6-8895-4074-85ed-f1e7ae76493f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 104.6457 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VCC_3V"
+		(shape input)
+		(at 40.64 68.58 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "294a7e06-75ec-409a-b239-f968f8316d10")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 30.7605 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "GND"
+		(shape input)
+		(at 237.49 77.47 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3eaf05be-cb20-4387-b586-603e655068aa")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 244.3457 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VCC_5V"
+		(shape input)
+		(at 97.79 68.58 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c42613d1-3807-49e6-aebf-7b283468d31a")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 107.6695 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "VCC_5V"
+		(shape input)
+		(at 237.49 52.07 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c47667a6-40bc-488e-abf6-8f3a8aaaa1e0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 247.3695 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(hierarchical_label "TX_ARDUINO_A2"
+		(shape input)
+		(at 110.49 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2c6d483b-b973-4e0e-86be-19e6cb9cd42b")
+	)
+	(hierarchical_label "RX_ARDUINO_A1"
+		(shape output)
+		(at 110.49 76.2 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b700abef-c0d0-4c52-bb60-df0746d5b80e")
+	)
+	(symbol
+		(lib_name "E22-900M30S_1")
+		(lib_id "E22-900M30S:E22-900M30S")
+		(at 219.71 64.77 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4db26466-5a3b-486e-afd0-626a05e43c31")
+		(property "Reference" "B1.1"
+			(at 219.71 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "E22-900M30S"
+			(at 219.71 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Modulo_LORA:XCVR_E22-900M30S"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MF" "EBYTE"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MAXIMUM_PACKAGE_HEIGHT" "3.97 mm"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Package" "Package"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Price" "None"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Check_prices" "https://www.snapeda.com/parts/E22-900M30S/EBYTE/view-part/?ref=eda"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "STANDARD" "Manufacturer Recommendations"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "PARTREV" "1.2"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "SnapEDA_Link" "https://www.snapeda.com/parts/E22-900M30S/EBYTE/view-part/?ref=snap"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MP" "E22-900M30S"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "SX1262 868/915 MHz 1w SPI LoRa Module"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Availability" "Not in stock"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MANUFACTURER" "EBYTE"
+			(at 219.71 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(pin "17"
+			(uuid "33e00571-fef0-4800-a7e8-ca7868695dbe")
+		)
+		(pin "18"
+			(uuid "5093d79a-cacc-4327-9055-87ee580de5cc")
+		)
+		(pin "15"
+			(uuid "d41d9752-aeda-4ab7-a6cd-4106f6534b23")
+		)
+		(pin "16"
+			(uuid "f90fa90c-db27-4392-84c2-e651f43cfb03")
+		)
+		(pin "8"
+			(uuid "5cf1b6af-1790-49b4-a282-10353960b215")
+		)
+		(pin "6"
+			(uuid "17c39223-885b-4bb9-a14f-d7af80719fde")
+		)
+		(pin "10"
+			(uuid "294ab21c-15f6-48b0-a8d1-b58ad88b2f0d")
+		)
+		(pin "9"
+			(uuid "1f5e25e6-6323-4c15-99a4-4c691aa3b2e2")
+		)
+		(pin "13"
+			(uuid "ca2affba-ab92-4819-bb55-083962fa29f5")
+		)
+		(pin "1"
+			(uuid "12c16c93-4278-4938-83de-a285f6e815a1")
+		)
+		(pin "14"
+			(uuid "7cf310e8-5a5a-4995-b1b8-e55ca40679a5")
+		)
+		(pin "12"
+			(uuid "5c6509f2-f8d2-475c-b0f0-ee359bbb6015")
+		)
+		(pin "21"
+			(uuid "f34c01fe-8e5f-41cc-9eb5-c61d16b36cd6")
+		)
+		(pin "7"
+			(uuid "aae08412-589c-4733-8f69-37afa29d5cda")
+		)
+		(pin "11"
+			(uuid "b8824b47-2ac5-45ea-b9d5-cf51d6bb9bcf")
+		)
+		(pin "2"
+			(uuid "d5cb5f2b-c2ba-4c3b-a685-091f98a58c0f")
+		)
+		(pin "4"
+			(uuid "f4d3a7d9-757f-41a4-9b8e-a5d7a6051348")
+		)
+		(pin "5"
+			(uuid "e3ce5d72-a19e-4cc5-8617-dd6949ef6656")
+		)
+		(pin "19"
+			(uuid "485a159c-3eb4-4261-ae00-6bc254cf55c0")
+		)
+		(pin "20"
+			(uuid "90bd0e0c-bb4a-4027-bb3b-367b27cc34e0")
+		)
+		(pin "22"
+			(uuid "04d94806-7c87-42c7-b5d0-4330367c1ad8")
+		)
+		(pin "3"
+			(uuid "9c517cd7-9b76-42d4-b56a-073984600b95")
+		)
+		(instances
+			(project "PCITransmissor"
+				(path "/10bdbad5-0117-4054-a1c0-638825a8f962/16058a85-0660-415d-8b43-f28bbee85e42"
+					(reference "B1.1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 46.99 63.5 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7de6a586-95bd-4fe4-b40b-37641058cfd7")
+		(property "Reference" "#PWR04"
+			(at 46.99 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 46.99 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 46.99 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 46.99 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 46.99 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c66003cd-0a38-4491-a2f8-b4f449fd1926")
+		)
+		(instances
+			(project ""
+				(path "/10bdbad5-0117-4054-a1c0-638825a8f962/16058a85-0660-415d-8b43-f28bbee85e42"
+					(reference "#PWR04")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "SMA-J-P-X-ST-MT1:SMA-J-P-X-ST-MT1")
+		(at 266.7 59.69 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "c2a234a2-9bca-4a0d-8958-8c0b019e777b")
+		(property "Reference" "J1"
+			(at 267.081 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SMA-J-P-X-ST-MT1"
+			(at 267.081 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Conector_Principal_Carro:SAMTEC_SMA-J-P-X-ST-MT1"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MF" "Samtec"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MAXIMUM_PACKAGE_HEIGHT" "8.08mm"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Package" "None"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Price" "None"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Check_prices" "https://www.snapeda.com/parts/SMA-J-P-H-ST-MT1/Samtec+Inc./view-part/?ref=eda"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "STANDARD" "Manufacturer Recommendations"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "PARTREV" "D"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "SnapEDA_Link" "https://www.snapeda.com/parts/SMA-J-P-H-ST-MT1/Samtec+Inc./view-part/?ref=snap"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MP" "SMA-J-P-H-ST-MT1"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Description_1" "SMA Connector Jack, Female Socket 50 Ohms Surface Mount, Through Hole Solder"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "Availability" "In Stock"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(property "MANUFACTURER" "Samtec"
+			(at 266.7 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ff098dbf-26bc-4ea5-993e-151d557f5297")
+		)
+		(pin "3"
+			(uuid "2496a15a-f20d-43ac-9929-4643e049e25d")
+		)
+		(pin "4"
+			(uuid "8a894b8b-60dd-40e8-95d3-ad8cfe7995cd")
+		)
+		(pin "5"
+			(uuid "2df7b0c8-3b98-4b69-b1d4-3a60a598e1a7")
+		)
+		(pin "2"
+			(uuid "97668984-f47f-4e05-9c92-556e0481af0c")
+		)
+		(instances
+			(project ""
+				(path "/10bdbad5-0117-4054-a1c0-638825a8f962/16058a85-0660-415d-8b43-f28bbee85e42"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+)
