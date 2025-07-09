@@ -1,0 +1,23 @@
+# Arquivo de dependências para o projeto de Telemetria de Carro
+# As versões estão pinadas para garantir um ambiente reproduzível.
+# Recomenda-se usar um ambiente virtual para instalar essas dependências.
+
+# Framework principal para criar o dashboard web interativo
+dash==2.17.1
+
+# Componentes de layout e estilo baseados em Bootstrap para o Dash
+dash-bootstrap-components==1.6.0
+
+# Biblioteca para manipulação e análise de dados (essencial para Nível 5 e 6)
+pandas==2.2.2
+
+# Biblioteca para comunicação com a porta serial (usada no Nível 3)
+pyserial==3.5
+
+# Biblioteca para criação de gráficos (usada pelo Dash para renderizar os plots)
+plotly==5.22.0
+
+== (Versão Exata)
+
+~= (Versão Compatível)
+>= (Versão Mínima)

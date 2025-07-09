@@ -1,0 +1,14 @@
+# Arquivo de dependências para o projeto de Teste de Rádio MoT (LoRa)
+# As versões estão pinadas para garantir um ambiente reproduzível.
+# Recomenda-se usar um ambiente virtual para instalar essas dependências.
+
+
+# Biblioteca para criação de gráficos estáticos e dinâmicos
+matplotlib==3.9.0
+
+# Biblioteca para manipulação e análise de dados
+pandas==2.2.2
+
+# Biblioteca para comunicação com a porta serial
+pyserial==3.5
+
