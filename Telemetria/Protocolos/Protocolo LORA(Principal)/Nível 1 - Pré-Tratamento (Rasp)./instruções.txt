@@ -1,0 +1,42 @@
+1.Configurar e ouvir a interface CAN do Raspberry Pi.
+
+2.Receber os pacotes brutos do CAN bus.
+
+3.Decodificar o ID de 29 bits para identificar o tipo de mensagem.
+
+4.Interpretar os bytes de dados, extraindo os MeasureID e os valores dos sensores.
+
+5.Aplicar os multiplicadores corretos conforme a documentação para converter os valores para as unidades corretas (RPM, Temp, Pressão, etc.).
+
+6.Manter um estado atualizado com o último valor de cada um dos 17 sensores que você precisa.
+
+7.Enviar, a uma taxa constante, a string formatada com todos os 17 valores pela porta serial (USB-Serial), pronta para ser lida pelo seu PC.
+
+
+1. Configuração do Ambiente na Raspberry Pi
+
+sudo pip3 install python-can pyserial
+
+no:
+sudo pip3 install python-can pyserial
+Modifique:
+dtparam=spi=on
+dtoverlay=mcp2515-can0,oscillator=8000000,interrupt=25
+
+Ativar a interface de Rede CAN (verifique se a raspberry aguenta os 1Mbps que a FuelTech pede):
+sudo ip link set can0 up type can bitrate 1000000 
+Verifique:
+ifconfig can0
+
+Conecte o Hardware:
+
+    Conecte seu módulo CAN à interface SPI da Raspberry Pi.
+
+    Conecte o módulo CAN ao barramento CAN do seu sistema FuelTech.
+
+    Conecte um adaptador USB-para-Serial na Raspberry Pi e a outra ponta no seu computador principal.
+
+Rode o script python
+python3 rpi_can_processor.py
+
+Precisa mudar o scrip python, para que ele não escreva na serial, mas envie via LORA os sensores.
