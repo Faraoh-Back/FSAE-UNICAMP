@@ -2,6 +2,7 @@
 # As versões estão pinadas para garantir um ambiente reproduzível.
 # Recomenda-se usar um ambiente virtual para instalar essas dependências.
 
+
 # Framework principal para criar o dashboard web interativo
 dash==2.17.1
 
@@ -16,8 +17,3 @@ pyserial==3.5
 
 # Biblioteca para criação de gráficos (usada pelo Dash para renderizar os plots)
 plotly==5.22.0
-
-== (Versão Exata)
-
-~= (Versão Compatível)
->= (Versão Mínima)
