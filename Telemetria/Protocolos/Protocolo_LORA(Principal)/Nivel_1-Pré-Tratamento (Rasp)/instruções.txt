@@ -1,44 +1,58 @@
-1.Configurar e ouvir a interface CAN do Raspberry Pi.
+========================================================================
+             INSTRUÇÕES DE EXECUÇÃO - COLETOR CAN
+========================================================================
 
-2.Receber os pacotes brutos do CAN bus.
+Este arquivo pertence ao script 'coletor_can.py'.
 
-3.Decodificar o ID de 29 bits para identificar o tipo de mensagem.
+------------------------------------------------------------------------
+1. O QUE ESTE SCRIPT FAZ?
+------------------------------------------------------------------------
+Este script é o "coração" da coleta de dados do carro. Ele tem duas
+funções principais:
+  - LER: Conecta-se diretamente à rede CAN do veículo (via módulo
+    MCP2515) e decodifica em tempo real os dados da ECU FuelTech.
+  - SERVIR: Atua como um servidor de dados local. Ele disponibiliza
+    as informações mais recentes dos sensores para que outros scripts,
+    como o transmissor LoRa, possam consumi-las.
 
-4.Interpretar os bytes de dados, extraindo os MeasureID e os valores dos sensores.
+Ele deve ser o PRIMEIRO script a ser iniciado.
 
-5.Aplicar os multiplicadores corretos conforme a documentação para converter os valores para as unidades corretas (RPM, Temp, Pressão, etc.).
+------------------------------------------------------------------------
+2. PRÉ-REQUISITOS
+------------------------------------------------------------------------
+a) Hardware:
+   - Raspberry Pi com o módulo MCP2515 devidamente conectado via SPI.
 
-6.Manter um estado atualizado com o último valor de cada um dos 17 sensores que você precisa.
+b) Bibliotecas Python:
+   - Verifique se a biblioteca 'python-can' está instalada. Se não, instale com:
+     pip install python-can
 
-7.Enviar, a uma taxa constante, a string formatada com todos os 17 valores pela porta serial (USB-Serial), pronta para ser lida pelo seu PC.
+c) Configuração do Sistema (Raspberry Pi):
+   - A interface SPI deve estar habilitada via 'sudo raspi-config'.
+   - O arquivo '/boot/config.txt' deve conter o overlay para o mcp2515.
+   - A interface de rede 'can0' deve ser ativada antes de rodar o script.
 
+------------------------------------------------------------------------
+3. COMO EXECUTAR
+------------------------------------------------------------------------
+1. Abra um terminal na sua Raspberry Pi.
 
-1. Configuração do Ambiente na Raspberry Pi
+2. Navegue até a pasta principal do seu projeto de telemetria. Exemplo:
+   cd /home/dev/GitPessoal/FSAE-UNICAMP/Telemetria/Protocolo_LORA(Principal)
 
-sudo pip3 install python-can pyserial
+3. Ative a interface de rede CAN com a velocidade correta (1 Mbps para FuelTech):
+   sudo ip link set can0 up type can bitrate 1000000
 
-no:
-sudo pip3 install python-can pyserial
-Modifique:
-dtparam=spi=on
-dtoverlay=mcp2515-can0,oscillator=8000000,interrupt=25
+4. Execute o script do coletor:
+   python3 Nivel_1_Coleta/coletor_can.py
 
-Ativar a interface de Rede CAN (verifique se a raspberry aguenta os 1Mbps que a FuelTech pede):
-sudo ip link set can0 up type can bitrate 1000000 
-Verifique:
-ifconfig can0
+------------------------------------------------------------------------
+4. O QUE ESPERAR
+------------------------------------------------------------------------
+Após a execução, o script imprimirá mensagens de inicialização e, em
+seguida, a mensagem:
+  "[Servidor de Dados] Aguardando conexão do cliente (Transmissor LoRa)..."
 
-Conecte o Hardware:
-
-    Conecte seu módulo CAN à interface SPI da Raspberry Pi.
-
-    Conecte o módulo CAN ao barramento CAN do seu sistema FuelTech.
-
-    Conecte um adaptador USB-para-Serial na Raspberry Pi e a outra ponta no seu computador principal.
-
-Rode o script python
-python3 rpi_can_processor.py
-
-Precisa mudar o firmware da rasp python, para que ele não escreva na serial, mas envie via LORA os sensores.
-
-Precisa fazer um sistema que salve as estatisticas em csv.
+O script ficará "parado" nesta etapa, o que é o comportamento
+correto. Ele está agora pronto e esperando o script do transmissor LoRa
+se conectar para começar a fornecer os dados.

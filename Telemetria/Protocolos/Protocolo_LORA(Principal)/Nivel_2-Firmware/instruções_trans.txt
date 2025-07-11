@@ -1,0 +1,62 @@
+========================================================================
+           INSTRUÇÕES DE EXECUÇÃO - TRANSMISSOR LORA
+========================================================================
+
+Este arquivo pertence ao script 'firmware_transmissor.py'.
+
+------------------------------------------------------------------------
+1. O QUE ESTE SCRIPT FAZ?
+------------------------------------------------------------------------
+Este script é o "comunicador" do projeto. Sua função é gerenciar toda
+a lógica de transmissão e recepção de dados via rádio LoRa.
+  - CONECTAR: Ele se conecta ao 'coletor_can.py' para obter os dados
+    dos sensores.
+  - GERENCIAR: Ele implementa a lógica de telemetria adaptativa,
+    decidindo quais dados enviar com base na qualidade do sinal.
+  - COMUNICAR: Ele ouve pacotes de status da base remota e envia os
+    pacotes de telemetria do carro.
+
+Ele deve ser iniciado APÓS o script 'coletor_can.py'.
+
+------------------------------------------------------------------------
+2. PRÉ-REQUISITOS
+------------------------------------------------------------------------
+a) Hardware:
+   - Raspberry Pi com o módulo LoRa E22-900T30D devidamente conectado
+     aos pinos GPIO (UART, M0, M1, AUX).
+
+b) Bibliotecas Python:
+   - Verifique se as bibliotecas RPi.GPIO e pyserial estão instaladas:
+     pip install RPi.GPIO pyserial
+
+c) Configuração do Sistema (Raspberry Pi):
+   - A interface Serial de hardware deve estar habilitada via 'sudo raspi-config'
+     e o console de login pela serial deve estar desativado.
+
+d) Dependência de Processo:
+   - O script 'coletor_can.py' DEVE estar rodando em outro terminal
+     para que este script funcione.
+
+------------------------------------------------------------------------
+3. COMO EXECUTAR
+------------------------------------------------------------------------
+1. Certifique-se de que 'coletor_can.py' já está em execução em um
+   primeiro terminal.
+
+2. Abra um SEGUNDO terminal na sua Raspberry Pi.
+
+3. Navegue para a mesma pasta principal do seu projeto. Exemplo:
+   cd /home/dev/GitPessoal/FSAE-UNICAMP/Telemetria/Protocolo_LORA(Principal)
+
+4. Execute o script do transmissor:
+   python3 Nivel_2-Firmware/firmware_transmissor.py
+
+------------------------------------------------------------------------
+4. O QUE ESPERAR
+------------------------------------------------------------------------
+O script imprimirá mensagens de inicialização, tentará se conectar ao
+coletor e, em seguida, começará a gerenciar a comunicação LoRa. Você
+verá mensagens periódicas indicando a qualidade do sinal e o tipo de
+pacote que está sendo enviado, como:
+  "[LoRa Manager] Qualidade do Sinal: -80 dBm. Enviando pacote FULL."
+  "-> LoRa TX: 35 bytes | Checksum: 0x4a"
