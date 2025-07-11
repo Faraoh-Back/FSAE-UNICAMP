@@ -11,8 +11,8 @@
 #define NO_SENSOR 0
 #define TRANSCEPTOR_BORDA 1
 #define MODO_DO_DISPOSITIVO NO_SENSOR
-#define PINO_RX 5
-#define PINO_TX 6
+#define PINO_RX 4
+#define PINO_TX 5
 
 // ---------- Arduino pins --------------
 LoRa_E220 e220ttl(4, 5, 3, 7, 6); // Arduino RX <-- e220 TX, Arduino TX --> e220 RX AUX/4 M0/5 M1/6 (Connections between Arduino and EByte E220)
