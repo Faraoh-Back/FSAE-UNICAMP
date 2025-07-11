@@ -12,10 +12,10 @@ ARQUIVO_PARAMETROS = os.path.join(PASTA_ARMAZENAMENTO, 'PARAMETROS.json')
 
 # Cabeçalho do CSV, correspondendo à ordem dos dados na string serial
 HEADERS = [
-    "timestamp", "RPM", "MAP", "Engine Temp", "Oil Pressure", "Fuel Pressure",
-    "Baterry Tension", "Sterring", "G Force", "Wheel Speed", "TPS",
-    "Break Temp", "Break Pressure", "Susp Pressure", "Susp Travel",
-    "Gear Position", "Oil Temp", "Water Temp"
+    "timestamp", "ECU RPM", "MAP", "Engine temperature", "Oil pressure", "Fuel pressure",
+    "ECU Batery voltage", "Steering Angle (Placeholder)", "Gforce -(lateral)",
+    "Traction speed", "TPS", "Brake pressure", "Suspension Travel (Placeholder)",
+    "Gear", "ECU Average O2", "ECU Injection Bank A Time"
 ]
 NUM_SENSORES = len(HEADERS) - 1
 

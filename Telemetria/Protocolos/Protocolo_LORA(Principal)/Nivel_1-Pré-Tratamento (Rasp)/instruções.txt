@@ -39,4 +39,6 @@ Conecte o Hardware:
 Rode o script python
 python3 rpi_can_processor.py
 
-Precisa mudar o scrip python, para que ele não escreva na serial, mas envie via LORA os sensores.
+Precisa mudar o firmware da rasp python, para que ele não escreva na serial, mas envie via LORA os sensores.
+
+Precisa fazer um sistema que salve as estatisticas em csv.

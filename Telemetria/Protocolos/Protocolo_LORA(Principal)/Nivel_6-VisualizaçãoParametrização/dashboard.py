@@ -15,9 +15,10 @@ ARQUIVO_PARAMETROS = os.path.join(PASTA_ARMAZENAMENTO, 'PARAMETROS.json')
 
 # Lista de sensores (deve ser a mesma do coletor, exceto timestamp)
 SENSORES = [
-    "RPM", "MAP", "Engine Temp", "Oil Pressure", "Fuel Pressure", "Baterry Tension", 
-    "Sterring", "G Force", "Wheel Speed", "TPS", "Break Temp", "Break Pressure", 
-    "Susp Pressure", "Susp Travel", "Gear Position", "Oil Temp", "Water Temp"
+    "ECU RPM", "MAP", "Engine temperature", "Oil pressure", "Fuel pressure",
+    "ECU Batery voltage", "Steering Angle (Placeholder)", "Gforce -(lateral)",
+    "Traction speed", "TPS", "Brake pressure", "Suspension Travel (Placeholder)",
+    "Gear", "ECU Average O2", "ECU Injection Bank A Time"
 ]
 
 # --- Inicialização do App Dash ---
