@@ -1,6 +1,0 @@
-# requirements.txt
-# Dependências necessárias para a aplicação de comunicação LoRa na Raspberry Pi
-# (Versões recomendadas para garantir compatibilidade)
-
-pyserial==3.5.1
-RPi.GPIO==0.7.1
