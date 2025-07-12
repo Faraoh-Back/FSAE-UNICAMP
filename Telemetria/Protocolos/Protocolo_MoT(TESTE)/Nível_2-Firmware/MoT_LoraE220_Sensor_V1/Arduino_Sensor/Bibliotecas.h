@@ -12,8 +12,8 @@
 #define TAMANHO_PACOTE     52
 
 // --- PINOS DO ARDUINO (Uno, Nano, etc.) ---
-#define LORA_RX_PIN        2
-#define LORA_TX_PIN        3
+#define LORA_RX_PIN        0
+#define LORA_TX_PIN        1
 #define LORA_AUX_PIN       4
 #define LORA_M0_PIN        5
 #define LORA_M1_PIN        6
