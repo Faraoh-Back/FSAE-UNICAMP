@@ -1,139 +1,76 @@
-import time
+void Phy_initialize() {  // Funcao de inicializacao da camada Física
+  Serial.begin(TAXA_SERIAL);
+  inicializa_lora();
+}
 
-TAXA_SERIAL = 9600
-TAMANHO_PACOTE = 52
-FREQUENCY_IN_MHZ = 433.0
-POWER_TX_DBM = 20
-RSSI_DOWNLINK = 50 
+void inicializa_lora() {
+  e22ttl.begin();
 
-PacoteDL = bytearray(TAMANHO_PACOTE)
-PacoteUL = bytearray(TAMANHO_PACOTE)
-RSSI_dBm_DL = 0
-RSSI_DL = 0
-LQI_DL = 0
+  // Esta biblioteca requer que você primeiro LEIA a configuração atual
+  ResponseStructContainer c;
+  c = e22ttl.getConfiguration();
+  Configuration configuration = *(Configuration*) c.data;
 
+  // Agora, modificamos os parâmetros que queremos alterar
+  configuration.ADDL = MY_ID;
+  configuration.CHAN = 65; // 65 para 915 MHz
 
-class E220TTL:
-    def begin(self):
-        print("E220TTL: Initializing UART and pins.")
+  // A estrutura de configuração é diferente nesta biblioteca
+  configuration.SPED.uartBaudRate = UART_BPS_9600;
+  configuration.SPED.airDataRate = AIR_DATA_RATE_010_24; // 2.4kbps
+  configuration.SPED.uartParity = MODE_00_8N1;
+  
+  configuration.OPTION.transmissionPower = POWER_22;
+  
+  // Modo de transmissão fixa é essencial para a lógica de endereçamento
+  configuration.TRANSMISSION_MODE.fixedTransmission = FT_FIXED_TRANSMISSION;
+  // Habilitar o envio de RSSI junto com o pacote
+  configuration.TRANSMISSION_MODE.enableRSSI = RSSI_ENABLED;
 
-    def available(self):
-        return False
+  // Finalmente, gravamos a nova configuração no módulo
+  ResponseStatus rs = e22ttl.setConfiguration(configuration, WRITE_CFG_PWR_DWN_SAVE);
+  
+  if (rs.code == E22_SUCCESS) {
+    Serial.println("Configuracao do modulo LoRa salva com sucesso!");
+  } else {
+    Serial.println("Erro ao salvar configuracao!");
+    while(1);
+  }
+  
+  delete (Configuration*)c.data;
+}
 
-    def receiveMessageRSSI(self):
+void Phy_radio_receive() {
+  // Nesta biblioteca, o 'available' pode retornar o tamanho do pacote + 1 byte de RSSI
+  if (e22ttl.available() > 1) { 
+    ResponseContainer rc = e22ttl.receiveMessageRSSI();
 
-        class ResponseContainer:
-            def __init__(self, data, rssi):
-                self.data = data
-                self.rssi = rssi
-        return ResponseContainer(b'', 0)
+    if (rc.status.code == E22_SUCCESS) {
+        if(rc.data.length() >= TAMANHO_PACOTE){
+            // Copia os dados da String para o array de bytes
+            memcpy(PacoteDL, rc.data.c_str(), TAMANHO_PACOTE);
+            RSSI_dBm_DL = rc.rssi;
+            Mac_radio_receive();
+        }
+    }
+  }
+}
 
-    def sendMessage(self, data, size):
-        print(f"E220TTL: Sending message of size {size}")
-        print(f"Data: {data.hex()}")
+void Phy_radio_send() {
+  Phy_dBm_to_Radiuino();
+  PacoteUL[RSSI_DOWNLINK] = RSSI_DL;
+  PacoteUL[LQI_DOWNLINK] = LQI_DL;
 
+  // Envia o pacote de resposta para a base
+  e22ttl.sendFixedMessage(0, ID_DA_BASE, 65, PacoteUL, TAMANHO_PACOTE);
+}
 
-e220ttl = E220TTL()
-
-
-def inicializa_lora():
-    """Initializes the LoRa module (simulated)."""
-
-    e220ttl.begin()
-
-
-def Phy_initialize():
-    """Physical layer initialization function."""
-
-    inicializa_lora()
-    print("Phy_initialize: Physical layer initialized.")
-
-def Mac_radio_receive():
-    """Placeholder for the MAC layer receive function."""
-    print("Mac_radio_receive: Handing packet to MAC layer.")
-    
-def Phy_radio_receive():
-    """Receives data from the radio."""
-    global RSSI_dBm_DL, PacoteDL, PacoteUL
-
-    if e220ttl.available():
-        rc = e220ttl.receiveMessageRSSI()
-        rssi_value = rc.rssi
-        received_message = rc.data
-        
-
-        if len(received_message) == TAMANHO_PACOTE:
-
-            RSSI_dBm_DL = -1 * (256 - rssi_value)
-
-
-            PacoteDL = bytearray(received_message)
-
-
-            for i in range(TAMANHO_PACOTE):
-                PacoteUL[i] = 1
-
-
-            Mac_radio_receive()
-        else:
-            print(f"Phy_radio_receive: Received packet of invalid size: {len(received_message)}")
-
-def Phy_dBm_to_Radiuino():
-    """
-    Converts RSSI in dBm to the Radiuino format (complement of 2, step 1/2, offset 74).
-    """
-    global RSSI_DL, LQI_DL
-
-
-    if RSSI_dBm_DL > -10.5:
-        RSSI_DL = 127 
-        LQI_DL = 1     
-
-
-    elif -10.5 >= RSSI_dBm_DL >= -74:
-
-        RSSI_DL = int((RSSI_dBm_DL + 74) * 2)
-        LQI_DL = 0
-
-
-    elif RSSI_dBm_DL < -74:
-
-        RSSI_DL = int(((RSSI_dBm_DL + 74) * 2) + 256)
-        LQI_DL = 0
-    
-
-
-def Phy_radio_send():
-    """Sends data via the radio."""
-    global PacoteUL, RSSI_DL
-
-    Phy_dBm_to_Radiuino()
-    
-
-    if RSSI_DOWNLINK < len(PacoteUL):
-        PacoteUL[RSSI_DOWNLINK] = RSSI_DL
-    else:
-        print("Error: RSSI_DOWNLINK index out of bounds for PacoteUL.")
-
-
-    e220ttl.sendMessage(PacoteUL, TAMANHO_PACOTE)
-
-
-if __name__ == "__main__":
-    print("Simulating Arduino Phy Layer behavior in Python.")
-    
-    Phy_initialize()
-    
-
-    RSSI_dBm_DL = -80.0
-    Phy_dBm_to_Radiuino()
-    print(f"\nExample RSSI Conversion:")
-    print(f"Input RSSI (dBm): {RSSI_dBm_DL}")
-    print(f"Converted RSSI_DL: {RSSI_DL}")
-    print(f"LQI_DL: {LQI_DL}")
-    
-
-    PacoteUL = bytearray([i % 256 for i in range(TAMANHO_PACOTE)])
-    
-    print("\nSimulating radio send:")
-    Phy_radio_send()
+void Phy_dBm_to_Radiuino() {
+  if(RSSI_dBm_DL > -10.5) {
+   RSSI_DL = 127; LQI_DL = 1;
+  } else if(RSSI_dBm_DL <= -10.5 && RSSI_dBm_DL >= -74) {
+   RSSI_DL = ((RSSI_dBm_DL + 74)*2); LQI_DL = 0;
+  } else {
+   RSSI_DL = (((RSSI_dBm_DL + 74)*2)+256); LQI_DL = 0;
+  }
+}

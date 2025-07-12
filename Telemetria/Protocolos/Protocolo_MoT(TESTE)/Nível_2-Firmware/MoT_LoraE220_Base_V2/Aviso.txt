@@ -1,0 +1,3 @@
+Precisa arrumar o Firmware do Arduino, procure pela biblioteca:
+include "LoRa_E22.h"
+no github

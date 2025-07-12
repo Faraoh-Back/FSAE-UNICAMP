@@ -9,6 +9,15 @@
 #include "Bibliotecas.h"  // Arquivo contendo declaração de bibliotecas e variáveis
 
 //=======================================================================
+//                     Protótipos das Funções
+//=======================================================================
+void Phy_initialize(); void inicializa_lora(); void Phy_radio_receive(); void Phy_radio_send(); void Phy_dBm_to_Radiuino();
+void Mac_initialize(); void Mac_radio_receive(); void Mac_radio_send();
+void Net_initialize(); void Net_radio_receive(); void Net_radio_send();
+void Transp_initialize(); void Transp_radio_receive(); void Transp_radio_send();
+void App_initialize(); void App_radio_receive(); void App_radio_send();
+
+//=======================================================================
 //                     2 - Variáveis
 //=======================================================================
 // As variávies utlizadas estão no arquivo de bibliotecas
@@ -23,6 +32,7 @@ void setup() {
   Net_initialize();     // Inicializa a camada de Rede
   Transp_initialize();
   App_initialize();
+  Serial.println("--- No LoRa (Arduino + E22) Pronto ---");
 }
 
 //=======================================================================
