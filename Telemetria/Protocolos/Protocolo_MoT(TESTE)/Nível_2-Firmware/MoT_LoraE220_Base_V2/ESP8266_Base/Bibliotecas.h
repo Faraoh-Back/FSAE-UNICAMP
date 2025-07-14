@@ -16,9 +16,9 @@
 // --- MUDANÇA: Novos pinos para o ESP8266 (NodeMCU/Wemos) ---
 #define LORA_RX_PIN      12      // GPIO12 (D6)
 #define LORA_TX_PIN      13      // GPIO13 (D7)
-#define LORA_AUX_PIN     4       // GPIO4  (D2)
-#define LORA_M0_PIN      5       // GPIO5  (D1)
-#define LORA_M1_PIN      14      // GPIO14 (D5)
+#define LORA_AUX_PIN     15       // GPIO4  (D2)
+#define LORA_M0_PIN      21       // GPIO5  (D1)
+#define LORA_M1_PIN      19      // GPIO14 (D5)
 
 // --- MUDANÇA: Criar um objeto SoftwareSerial para a comunicação LoRa ---
 SoftwareSerial loraSerial(LORA_RX_PIN, LORA_TX_PIN);

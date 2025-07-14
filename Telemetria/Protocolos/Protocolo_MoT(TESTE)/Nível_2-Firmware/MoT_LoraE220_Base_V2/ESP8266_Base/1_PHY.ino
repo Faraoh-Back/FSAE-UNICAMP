@@ -11,7 +11,7 @@ void Phy_initialize() {
   inicializa_lora();
   
   // Configurar módulo para 915 MHz
-  configureLoraModule();
+  // configureLoraModule();
   
   Serial.println("PHY: Camada física inicializada com sucesso!");
 }

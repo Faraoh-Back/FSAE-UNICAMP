@@ -16,6 +16,22 @@
 //=======================================================================
 //                     3 - Setup de inicialização
 //=======================================================================
+
+void printParameters(struct Configuration configuration) {
+  Serial.println("----------------------------------------");
+  Serial.println("      PARAMETROS ATUAIS DO MODULO (BASE ESP8266)");
+  Serial.println("----------------------------------------");
+
+  Serial.print(F("Frequencia       : "));  Serial.print(configuration.getChannelDescription()); Serial.println();
+  Serial.print(F("Endereco         : "));  Serial.print(configuration.ADDH, HEX); Serial.print(configuration.ADDL, HEX); Serial.println();
+  Serial.print(F("Baud Rate UART   : "));  Serial.println(configuration.SPED.getUARTBaudRateDescription());
+  Serial.print(F("Velocidade no Ar : "));  Serial.println(configuration.SPED.getAirDataRateDescription());
+  Serial.print(F("Potencia         : "));  Serial.println(configuration.OPTION.getTransmissionPowerDescription());
+  Serial.print(F("Modo de Envio    : "));  Serial.println(configuration.TRANSMISSION_MODE.getFixedTransmissionDescription());
+  Serial.print(F("RSSI Ativado     : "));  Serial.println(configuration.TRANSMISSION_MODE.getRSSIEnableByteDescription());
+  Serial.println("----------------------------------------");
+}
+
 // Inicializa as camadas
 void setup() {
   Serial.begin(TAXA_SERIAL);

@@ -97,6 +97,7 @@ class E220TTL:
         print(f"E220TTL: Pacote (hex): {config_packet.hex()}")
         
         self.ser.write(config_packet)
+        e220ttl.wait_aux_high() # Espera o AUX ficar HIGH para garantir que o módulo está pronto
         time.sleep(0.2) 
 
         print("E220TTL: Configuração concluída. Retornando ao modo de transmissão (Modo 0).")
@@ -120,7 +121,8 @@ class E220TTL:
     def sendMessage(self, data, size):
         """Envia dados via a porta serial."""
         self.ser.write(data)
-        print(f"E220TTL: Enviando mensagem de {size} bytes via porta serial.")
+        e220ttl.wait_aux_high() # Espera o AUX ficar HIGH para garantir que o módulo está pronto
+
 
     def read_and_print_configuration(self):
         """Lê e imprime a configuração atual do módulo LoRa."""
@@ -130,7 +132,7 @@ class E220TTL:
         # Comando para ler 6 bytes de configuração a partir do endereço 0
         read_cmd = bytearray([0xC1, 0x00, 0x06])
         self.ser.write(read_cmd)
-        time.sleep(0.1)
+        time.sleep(0.5)
 
         # Lê a resposta
         response = self.ser.read(10) # Lê até 10 bytes para garantir
@@ -169,6 +171,15 @@ class E220TTL:
         else:
             print("Falha ao ler a configuracao do modulo do Pi.")
 
+        def wait_aux_high(self, timeout=1.5):
+            """Espera o AUX ficar HIGH para garantir operação do módulo."""
+            start = time.time()
+            while not self.pin_aux.value:
+                if time.time() - start > timeout:
+                    print("Erro: AUX demorou para ficar HIGH")
+                    break
+                time.sleep(0.01)
+
 # =======================================================================
 # O restante do código (Camadas de Rede) permanece o mesmo.
 # =======================================================================
@@ -181,7 +192,7 @@ def inicializa_lora():
 def Phy_initialize():
     print(f"Serial inicializada em {TAXA_SERIAL} bps.")
     inicializa_lora()
-    e220ttl.configure_lora()
+    #e220ttl.configure_lora()
 
 def Phy_dBm_to_Radiuino():
     global RSSI_DL, LQI_DL
