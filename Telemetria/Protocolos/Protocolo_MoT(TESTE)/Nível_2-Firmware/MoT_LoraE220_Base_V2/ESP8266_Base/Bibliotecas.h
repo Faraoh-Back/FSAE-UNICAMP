@@ -1,3 +1,5 @@
+#ifndef BIBLIOTECAS_H
+#define BIBLIOTECAS_H
 // --- MUDANÇA: SoftwareSerial agora é necessária para o ESP8266 ---
 #include <SoftwareSerial.h>
 
@@ -9,10 +11,6 @@
 #define TAXA_SERIAL 115200
 #define TAMANHO_PACOTE 52
 #define FREQUENCY_IN_MHZ 915.0
-#define POWER_TX_DBM 5 
-#define NO_SENSOR 0
-#define TRANSCEPTOR_BORDA 1
-#define MODO_DO_DISPOSITIVO NO_SENSOR
 
 // --- MUDANÇA: Novos pinos para o ESP8266 (NodeMCU/Wemos) ---
 #define LORA_RX_PIN      12      // GPIO12 (D6)
@@ -27,7 +25,7 @@ SoftwareSerial loraSerial(LORA_RX_PIN, LORA_TX_PIN);
 // --- MUDANÇA: Inicializar o LoRa usando o objeto loraSerial ---
 LoRa_E220 e220ttl(&loraSerial, LORA_AUX_PIN, LORA_M0_PIN, LORA_M1_PIN);
 
-#define ShowSerial Serial
+//#define ShowSerial Serial
 
 // O resto do arquivo permanece o mesmo...
 byte PacoteDL[TAMANHO_PACOTE];
@@ -91,3 +89,5 @@ enum bytes_do_pacote{
   APP35 = 50,
   APP36 = 51,
 };
+
+#endif

@@ -10,13 +10,11 @@ void Mac_serial_receive() {  // Função de recepção de pacote da Camada MAC
 void Mac_radio_receive() {
   Net_radio_receive();
 }
-
 //================
 void Mac_serial_send()  // Função de envio de pacote da Camada MAC
 {
   Phy_serial_send();  //Chama a função de envio da Camada Física
 }
-
 void Mac_radio_send() {
   Phy_radio_send();
 }

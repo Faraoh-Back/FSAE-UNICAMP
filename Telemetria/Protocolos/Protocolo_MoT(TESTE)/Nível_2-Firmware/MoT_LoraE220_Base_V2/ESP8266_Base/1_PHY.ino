@@ -30,7 +30,6 @@ void Phy_serial_receive() {  // Funcao de recepcao de pacote da Camada Física
 void Phy_radio_receive() {
   if (e220ttl.available()) {
     ResponseContainer rc = e220ttl.receiveMessageRSSI();
-    
     String receivedMessage = rc.data;
 
     // Condição para processar apenas se o tamanho for o esperado

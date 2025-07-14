@@ -33,7 +33,7 @@ const long interval = 10000; // Intervalo de 10 segundos
 
 void loop() {
   // ADICIONE ESTA LINHA para que o ESP sempre escute o rádio
-  Phy_radio_receive();
+  Phy_serial_receive();
 
   // A lógica de envio a cada 10 segundos continua a mesma
   unsigned long currentMillis = millis();
@@ -49,4 +49,5 @@ void loop() {
     // Envia o pacote
     Phy_radio_send();
   }
+  Phy_radio_receive();
 }

@@ -2,6 +2,10 @@ void Net_initialize()  // Função de inicialização da camada de Rede
 {
 }
 
+void Net_serial_receive()  // Função de recepção de pacote da Camada de Rede
+{
+  Net_radio_send();  // Demais camadas são tratadas no Python da Borda
+}
 // ====== FUNÇÃO RECEBE PAOCTE DA CAMDA DE REDE
 // No ESP8266
 void Net_radio_receive() {
@@ -21,11 +25,6 @@ void Net_radio_receive() {
   }
 }
 
-void Net_radio_receive() {
-  if (PacoteUL[RECEIVER_ID] == MY_ID) {
-    Net_serial_send();  // Demais camadas são tratadas no Python da Borda
-  }
-}
 // ====== ENVIA PACOTE CAMADA REDE
 void Net_serial_send()  // Função de envio de pacote da Camada de Rede
 {
