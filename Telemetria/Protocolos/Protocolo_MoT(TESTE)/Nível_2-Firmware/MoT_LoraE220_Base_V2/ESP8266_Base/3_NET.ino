@@ -1,36 +1,35 @@
-void Net_initialize()  // Função de inicialização da camada de Rede
-{
+void Net_initialize() {
+  Serial.println("NET: Camada de rede inicializada.");
 }
 
-void Net_serial_receive()  // Função de recepção de pacote da Camada de Rede
-{
-  Net_radio_send();  // Demais camadas são tratadas no Python da Borda
-}
-// ====== FUNÇÃO RECEBE PAOCTE DA CAMDA DE REDE
-// No ESP8266
 void Net_radio_receive() {
-  // A resposta do Pi foi salva em PacoteDL.
-  // O código original verificava PacoteUL por engano.
-  Serial.print("Rede: Resposta recebida. Verificando ID... (Esperado: ");
+  Serial.print("NET: Verificando destinatário... (Esperado: ");
   Serial.print(MY_ID);
   Serial.print(", Recebido: ");
   Serial.print(PacoteDL[RECEIVER_ID]);
   Serial.println(")");
   
-  if (PacoteDL[RECEIVER_ID] == MY_ID) { // <-- CORRIGIDO para usar PacoteDL
-    Serial.println("Rede: ID Correto! Processando resposta.");
-    Net_serial_send();
+  if (PacoteDL[RECEIVER_ID] == MY_ID) {
+    Serial.println("NET: Pacote é para mim! Processando...");
+    
+    // Incrementar contador de downlink
+    contadorDL++;
+    
+    // Mostrar informações do pacote
+    Serial.print("NET: Pacote do transmissor ID: ");
+    Serial.println(PacoteDL[TRANSMITTER_ID]);
+    
   } else {
-    Serial.println("Rede: Resposta descartada, ID incorreto.");
+    Serial.println("NET: Pacote descartado - não é para mim.");
   }
 }
 
-// ====== ENVIA PACOTE CAMADA REDE
-void Net_serial_send()  // Função de envio de pacote da Camada de Rede
-{
-  Mac_serial_send();  //Chama a função de envio da Camada de Acesso ao Meio
-}
-
 void Net_radio_send() {
+  Serial.println("NET: Preparando pacote para envio...");
+  
+  // Configurar roteamento (resposta)
+  PacoteUL[RECEIVER_ID] = PacoteDL[TRANSMITTER_ID];  // Responder para quem enviou
+  PacoteUL[TRANSMITTER_ID] = MY_ID;                  // Eu sou o transmissor
+  
   Mac_radio_send();
 }

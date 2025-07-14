@@ -7,7 +7,8 @@
 #include "Arduino.h"
 #include "LoRa_E220.h"
 
-#define MY_ID 1 
+#define MY_ID 1
+#define SENSOR_ID 100
 #define TAXA_SERIAL 115200
 #define TAMANHO_PACOTE 52
 #define FREQUENCY_IN_MHZ 915.0
@@ -30,9 +31,9 @@ LoRa_E220 e220ttl(&loraSerial, LORA_AUX_PIN, LORA_M0_PIN, LORA_M1_PIN);
 // O resto do arquivo permanece o mesmo...
 byte PacoteDL[TAMANHO_PACOTE];
 byte PacoteUL[TAMANHO_PACOTE];
-int contadorUL;
-int contadorDL;
-int RSSI_dBm_UL, RSSI_UL, LQI_UL;
+int contadorUL = 0;
+int contadorDL = 0;
+int RSSI_dBm_UL = 0, RSSI_UL = 0, LQI_UL = 0;
 
 enum bytes_do_pacote{
   /* ... (o enum continua igual) ... */

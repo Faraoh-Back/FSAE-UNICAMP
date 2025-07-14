@@ -18,6 +18,8 @@
 //=======================================================================
 // Inicializa as camadas
 void setup() {
+  Serial.begin(TAXA_SERIAL);
+
   Phy_initialize();     // Inicializa a camada Física
   Mac_initialize();     // Inicializa a camada de Controle de Acesso ao Meio
   Net_initialize();     // Inicializa a camada de Rede
@@ -33,7 +35,7 @@ const long interval = 10000; // Intervalo de 10 segundos
 
 void loop() {
   // ADICIONE ESTA LINHA para que o ESP sempre escute o rádio
-  Phy_serial_receive();
+  Phy_radio_receive();
 
   // A lógica de envio a cada 10 segundos continua a mesma
   unsigned long currentMillis = millis();
@@ -42,12 +44,27 @@ void loop() {
     
     Serial.println("\nEnviando pacote de teste para o no sensor (ID 100)...");
     
-    // Monta o pacote de uplink (UL)
-    PacoteUL[RECEIVER_ID] = 100;      // Endereça para a Raspberry Pi
-    PacoteUL[TRANSMITTER_ID] = MY_ID; // Diz que foi a Base (ID 1) que enviou
+    // Limpar pacote UL
+    memset(PacoteUL, 0, TAMANHO_PACOTE);
     
-    // Envia o pacote
-    Phy_radio_send();
+    // Configurar cabeçalho do pacote
+    PacoteUL[RECEIVER_ID] = SENSOR_ID;    // Para a Raspberry Pi
+    PacoteUL[TRANSMITTER_ID] = MY_ID;     // Da Base (ESP8266)
+    
+    // Incrementar contador
+    contadorUL++;
+    PacoteUL[UL_COUNTER_MSB] = (contadorUL >> 8) & 0xFF;
+    PacoteUL[UL_COUNTER_LSB] = contadorUL & 0xFF;
+    
+    // Dados de teste na camada de aplicação
+    PacoteUL[APP1] = 0xAA; // Byte de teste
+    PacoteUL[APP2] = 0xBB; // Byte de teste
+    
+    Serial.print("Contador UL: ");
+    Serial.println(contadorUL);
+    
+    // Enviar pacote
   }
-  Phy_radio_receive();
+
+  delay(50);
 }
