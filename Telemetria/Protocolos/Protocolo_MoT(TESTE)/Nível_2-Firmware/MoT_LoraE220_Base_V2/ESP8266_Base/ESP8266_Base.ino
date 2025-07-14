@@ -35,7 +35,7 @@ void printParameters(struct Configuration configuration) {
 // Inicializa as camadas
 void setup() {
   Serial.begin(TAXA_SERIAL);
-
+  delay(1000);
   Phy_initialize();     // Inicializa a camada Física
   Mac_initialize();     // Inicializa a camada de Controle de Acesso ao Meio
   Net_initialize();     // Inicializa a camada de Rede

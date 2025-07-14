@@ -84,7 +84,6 @@ void inicializa_lora() {
   
   // Inicializar todos os pinos e UART
   e220ttl.begin();
-  
   delay(2000); // Dar tempo para o módulo estabilizar
   
   Serial.println("PHY: Módulo E220 inicializado.");

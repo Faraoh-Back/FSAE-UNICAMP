@@ -20,7 +20,7 @@ MY_ID = 100
 
 # Pinos GPIO para controle do E220 (numeração BCM)
 PIN_M0 = 17  
-PIN_M1 = 25  
+PIN_M1 = 18  
 PIN_AUX = 27 
 
 # A pinagem UART é gerenciada pela configuração do sistema (/dev/serial0)
@@ -88,7 +88,7 @@ class E220TTL:
             0xC0,  # CABEÇALHO: Salvar configuração na memória ao desligar.
             0x00,  # ENDEREÇO_ALTO: Endereço do módulo (0x0000 = genérico).
             0x00,  # ENDEREÇO_BAIXO: Endereço do módulo.
-            0x62,  # REG0: UART 9600bps, 8N1. Air Data Rate 2.4kbps.
+            0x60,  # REG0: UART 9600bps, 8N1. Air Data Rate 2.4kbps.
             0x41,  # REG1: Byte do Canal -> 0x41 (65 dec) => 850 + 65 = 915 MHz.
             0x41   # REG2: Potência de transmissão 22dBm, RSSI ativado.
         ])
