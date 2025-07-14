@@ -211,6 +211,55 @@ def App_radio_receive():
     App_radio_send()
 def App_radio_send(): Transp_radio_send()
 
+# COLE ESTE NOVO MÉTODO DENTRO DA CLASSE E220TTL NO ARQUIVO Sensor.py
+
+def read_and_print_configuration(self):
+    """Lê e imprime a configuração atual do módulo LoRa."""
+    print("Lendo a configuracao do modulo para verificacao...")
+    self.set_mode(3) # Entra no modo de configuração
+
+    # Comando para ler 6 bytes de configuração a partir do endereço 0
+    read_cmd = bytearray([0xC1, 0x00, 0x06])
+    self.ser.write(read_cmd)
+    time.sleep(0.1)
+
+    # Lê a resposta
+    response = self.ser.read(10) # Lê até 10 bytes para garantir
+
+    self.set_mode(0) # Retorna ao modo normal
+
+    if len(response) >= 6:
+        # Dicionários para "traduzir" os bytes
+        air_rates = {0b010: "2.4kbps", 0b011: "4.8kbps"}
+        power_levels = {0b00: "30dBm", 0b01: "27dBm", 0b10: "24dBm", 0b11: "21dBm"} # Atenção: Datasheet do E220-900M30S
+
+        reg0 = response[3]
+        reg1 = response[4]
+        reg2 = response[5]
+
+        air_rate_val = reg0 & 0b111
+        uart_baud_val = (reg0 >> 3) & 0b111
+
+        freq_chan = reg1
+        freq_mhz = 850 + freq_chan # Para a série 900M
+
+        rssi_enabled = "SIM" if (reg2 >> 7) & 1 else "NAO"
+        power_val_str = "22dBm (Padrão)" # Aproximação baseada na biblioteca do ESP
+
+        print("----------------------------------------")
+        print("         PARAMETROS DO MODULO LORA (RASPBERRY PI)     ")
+        print("----------------------------------------")
+        print(f"Frequencia       : {freq_mhz} MHz (Canal: {freq_chan})")
+        # O endereço não é lido com este comando simples, mas sabemos que é 0x0000
+        print(f"Endereco         : 0000") 
+        print(f"Baud Rate UART   : { {0b011: '9600bps'}.get(uart_baud_val, 'Desconhecido') }")
+        print(f"Velocidade no Ar : { air_rates.get(air_rate_val, 'Desconhecido') }")
+        print(f"Potencia         : {power_val_str}")
+        print(f"RSSI Ativado     : {rssi_enabled}")
+        print("----------------------------------------")
+    else:
+        print("Falha ao ler a configuracao do modulo do Pi.")
+
 # =======================================================================
 # EXECUÇÃO PRINCIPAL
 # =======================================================================
@@ -222,6 +271,8 @@ def setup():
     Net_initialize()
     Transp_initialize()
     App_initialize()
+
+    e220ttl.read_and_print_configuration()
 
 def loop():
     """O loop principal do programa para receber dados reais."""

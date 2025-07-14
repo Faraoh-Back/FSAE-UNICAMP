@@ -68,20 +68,6 @@ void Phy_radio_send() {
   PacoteUL[RSSI_UPLINK] = RSSI_UL;
   PacoteUL[LQI_UPLINK] = LQI_UL;
   
-  // ================================================================
-  //          BLOCO DE DEBUG PARA VER O PACOTE DE ENVIO
-  // ================================================================
-  Serial.println("--- [ESP8266] Preparando para enviar o seguinte PacoteUL (HEX): ---");
-  for (int i = 0; i < TAMANHO_PACOTE; i++) {
-    if (PacoteUL[i] < 0x10) {
-      Serial.print("0"); // Adiciona um zero à esquerda para bytes menores que 16
-    }
-    Serial.print(PacoteUL[i], HEX);
-    Serial.print(" ");
-  }
-  Serial.println("\n------------------------------------------------------------------");
-  // ================================================================
-
   // Enviar mensagem
   ResponseStatus rs = e220ttl.sendMessage(PacoteUL, TAMANHO_PACOTE);
   
