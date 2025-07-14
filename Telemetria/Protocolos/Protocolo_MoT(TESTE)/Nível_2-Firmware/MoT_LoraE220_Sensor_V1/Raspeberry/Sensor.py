@@ -4,8 +4,8 @@
 # =======================================================================
 
 # --- BIBLIOTECAS CORRIGIDAS ---
-from gpiozero import OutputDevice, InputDevice # Biblioteca moderna para GPIO
 import serial
+from gpiozero import OutputDevice, InputDevice # Biblioteca moderna para GPIO
 import time
 
 # =======================================================================
@@ -145,9 +145,10 @@ def Phy_dBm_to_Radiuino():
 def Phy_radio_receive():
     global RSSI_dBm_DL, PacoteDL
     received_message, rssi_value = e220ttl.receiveMessageRSSI()
-    if len(received_message) == TAMANHO_PACOTE - 1:
+    if len(received_message) == TAMANHO_PACOTE:
         if rssi_value != 0: RSSI_dBm_DL = rssi_value - 256
         else: RSSI_dBm_DL = 0
+        #O PacoteDL deve ser preenchido com os dados recebidos
         PacoteDL = bytearray(received_message)
         print("\n--- Estatísticas de Recebimento (PHY) ---")
         print(f"RSSI: {RSSI_dBm_DL:.2f} dBm")
