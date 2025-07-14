@@ -90,7 +90,7 @@ class E220TTL:
             0x00,  # ENDEREÇO_BAIXO: Endereço do módulo.
             0x62,  # REG0: UART 9600bps, 8N1. Air Data Rate 2.4kbps.
             0x41,  # REG1: Byte do Canal -> 0x41 (65 dec) => 850 + 65 = 915 MHz.
-            0x44   # REG2: Potência de transmissão 30dBm (máxima), RSSI ativado.
+            0x41   # REG2: Potência de transmissão 22dBm, RSSI ativado.
         ])
 
         print(f"E220TTL: Enviando pacote de configuração para operar em 915 MHz...")
@@ -145,6 +145,19 @@ def Phy_dBm_to_Radiuino():
 def Phy_radio_receive():
     global RSSI_dBm_DL, PacoteDL
     received_message, rssi_value = e220ttl.receiveMessageRSSI()
+
+    # ================================================================
+    #      BLOCO DE DEBUG PARA VER QUALQUER PACOTE RECEBIDO
+    # ================================================================
+    # Este 'if' executa sempre que qualquer dado (de qualquer tamanho) chegar
+    if received_message:
+        print("--- [Raspberry Pi] PACOTE BRUTO RECEBIDO (HEX): ---")
+        # .hex(' ') é uma forma fácil em Python de formatar o bytearray
+        print(received_message.hex(' '))
+        print(f"--> Tamanho do pacote recebido: {len(received_message)} bytes")
+        print("----------------------------------------------------")
+    # ================================================================
+
     if len(received_message) == TAMANHO_PACOTE:
         if rssi_value != 0: RSSI_dBm_DL = rssi_value - 256
         else: RSSI_dBm_DL = 0
