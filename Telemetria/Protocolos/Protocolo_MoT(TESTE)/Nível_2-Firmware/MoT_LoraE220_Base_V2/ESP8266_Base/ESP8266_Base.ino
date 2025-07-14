@@ -32,8 +32,10 @@ unsigned long previousMillis = 0;
 const long interval = 10000; // Intervalo de 10 segundos
 
 void loop() {
-  Phy_serial_receive();
-  // Envia um pacote de teste a cada 10 segundos
+  // ADICIONE ESTA LINHA para que o ESP sempre escute o rádio
+  Phy_radio_receive();
+
+  // A lógica de envio a cada 10 segundos continua a mesma
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;

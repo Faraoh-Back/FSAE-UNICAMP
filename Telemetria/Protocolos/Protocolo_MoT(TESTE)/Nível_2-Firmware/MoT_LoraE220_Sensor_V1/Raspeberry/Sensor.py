@@ -168,9 +168,14 @@ def Mac_radio_send(): Phy_radio_send()
 
 # 3.NETWORK
 def Net_initialize(): print("Rede: Camada inicializada.")
+# Em Sensor.py
 def Net_radio_receive():
-    if PacoteDL[RECEIVER_ID] == MY_ID: Transp_radio_receive()
-    else: print(f"Rede: Pacote descartado. Não é para o meu ID ({MY_ID}).")
+    print(f"Rede: Pacote recebido. Verificando ID do destinatário... (Esperado: {MY_ID}, Recebido: {PacoteDL[RECEIVER_ID]})")
+    if PacoteDL[RECEIVER_ID] == MY_ID: 
+        print("Rede: ID correto! Encaminhando para a camada de transporte.")
+        Transp_radio_receive()
+    else: 
+        print(f"Rede: Pacote descartado. Não é para o meu ID.")
 def Net_radio_send():
     PacoteUL[RECEIVER_ID] = PacoteDL[TRANSMITTER_ID]
     PacoteUL[TRANSMITTER_ID] = MY_ID

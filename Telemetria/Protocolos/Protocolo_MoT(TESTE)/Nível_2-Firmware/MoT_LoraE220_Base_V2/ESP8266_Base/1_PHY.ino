@@ -28,41 +28,25 @@ void Phy_serial_receive() {  // Funcao de recepcao de pacote da Camada Física
 }
 
 void Phy_radio_receive() {
-  // if (rf95.available()) {
-  //   uint8_t len_pacote = TAMANHO_PACOTE;
-  //   if (rf95.recv(PacoteDL, &len_pacote)) {
-  //     if (len_pacote >= TAMANHO_PACOTE) {
-  //       RSSI_dBm_UL = rf95.lastRssi();
-  //       Mac_radio_receive();
-  //     }
-  //   }
-  // }
   if (e220ttl.available()) {
-    ResponseContainer rc = e220ttl.receiveMessageRSSI();  // Receive the message and RSSI value
-    int rssiValue = rc.rssi;  // Get the RSSI value
+    ResponseContainer rc = e220ttl.receiveMessageRSSI();
     
-    // Extract message and RSSI value
     String receivedMessage = rc.data;
-    receivedMessage.getBytes(PacoteUL,receivedMessage.length());
+
+    // Condição para processar apenas se o tamanho for o esperado
     if (receivedMessage.length() == TAMANHO_PACOTE) {
+        Serial.println("\n--- PACOTE LORA RECEBIDO PELA BASE ---");
+
+        // CORREÇÃO: Salve a mensagem recebida no PACOTE DE RECEBIMENTO (DL = Downlink)
+        receivedMessage.getBytes(PacoteDL, TAMANHO_PACOTE + 1); // <--- CORREÇÃO AQUI
+
+        int rssiValue = rc.rssi;
         RSSI_dBm_UL = -1* (256-rssiValue);
+        Serial.print("RSSI da resposta: ");
+        Serial.print(RSSI_dBm_UL);
+        Serial.println(" dBm");
 
-        // //Debug
-        // Serial.write(receivedMessage.length());
-        // for(int i=0;i<52;i++){
-        //   Serial.write(PacoteDL[i]);
-        // }
-        // Serial.println();
-        // for(int i=0;i<52;i++){
-        //   Serial.print(PacoteUL[i]);
-        //   Serial.print("-");
-        // }
-        // Serial.println();
-
-
-
-
-
+        // Agora, continue o processamento do pacote recebido
         Mac_radio_receive();
     }
   }
