@@ -1,22 +1,34 @@
+import serial
+import RPi.GPIO as GPIO
 import time
-# ... (importe a sua classe E220TTL e configure o objeto e220ttl) ...
 
-e220ttl = E220TTL()
-e220ttl.begin()
-e220ttl.configure_lora() # Garante que está nos mesmos parâmetros da base
+SERIAL_PORT = "/dev/serial0"
+BAUDRATE = 9600
 
-print("Sensor de Teste Pronto. Ouvindo por 'PING'...")
+PIN_M0 = 17
+PIN_M1 = 18
+PIN_AUX = 27
 
-while True:
-  # Ouve por uma mensagem
-  received_message, rssi = e220ttl.receiveMessageRSSI()
-  if received_message:
-    print(f"Mensagem recebida: {received_message.decode('utf-8', 'ignore')}")
-    
-    # Se receber "PING", responde com "PONG"
-    if "PING" in received_message.decode('utf-8', 'ignore'):
-      print("PING recebido! Enviando PONG para a Base (Endereco 1)...")
-      # O endereço da base deve ser 1, conforme o .h da base
-      e220ttl.sendMessage(1, 65, b"PONG do Pi!") 
-  
-  time.sleep(0.1)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(PIN_M0, GPIO.OUT)
+GPIO.setup(PIN_M1, GPIO.OUT)
+GPIO.setup(PIN_AUX, GPIO.IN)
+
+# Coloca E22 em modo normal
+GPIO.output(PIN_M0, GPIO.LOW)
+GPIO.output(PIN_M1, GPIO.LOW)
+time.sleep(0.1)
+
+ser = serial.Serial(SERIAL_PORT, BAUDRATE, timeout=1)
+print("Aguardando mensagens LoRa...")
+
+try:
+    while True:
+        if ser.in_waiting > 0:
+            msg = ser.readline().decode('utf-8', errors='ignore').strip()
+            print("Recebido:", msg)
+except KeyboardInterrupt:
+    print("Saindo.")
+finally:
+    ser.close()
+    GPIO.cleanup()

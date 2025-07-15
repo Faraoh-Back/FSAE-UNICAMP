@@ -19,14 +19,18 @@ void inicializa_lora() {
   c = e22ttl.getConfiguration();
   Configuration configuration = *(Configuration*) c.data;
   Serial.println(c.status.getResponseDescription());
+  Serial.println(c.status.code);
   
+  printParameters(configuration);
+
   if (c.status.code != E22_SUCCESS) {
       Serial.println("ERRO CRITICO AO LER CONFIGURACAO INICIAL!");
       while(1);
   }
 
+
   // 2. Modifica os parametros para a compatibilidade com o script da Pi
-  configuration.ADDL = 0x01; // Endereço de hardware da Base = 1
+  configuration.ADDL = 0x03; // Endereço de hardware da Base = 1
   configuration.ADDH = 0x00;
   configuration.NETID = 0x00;
 
@@ -50,16 +54,23 @@ void inicializa_lora() {
   configuration.TRANSMISSION_MODE.WORPeriod = WOR_2000_011;
 
   // 3. Salva a nova configuração no módulo
-  ResponseStatus rs = e22ttl.setConfiguration(configuration, WRITE_CFG_PWR_DWN_SAVE);
+  // Set configuration changed and set to not hold the configuration
+	ResponseStatus rs = e22ttl.setConfiguration(configuration, WRITE_CFG_PWR_DWN_SAVE);
+	Serial.println(rs.getResponseDescription());
+	Serial.println(rs.code);
 
-  delay(20000);
+  c = e22ttl.getConfiguration();
+  configuration = *(Configuration*) c.data;
+	Serial.println(c.status.getResponseDescription());
+	Serial.println(c.status.code);
+  /*delay(2000);
 
   if (rs.code == E22_SUCCESS) {
     Serial.println("PHY: Configuração do módulo aplicada com SUCESSO!");
   } else {
     Serial.print("ERRO! Falha ao salvar configuração: ");
     while(1);
-  }
+  }*/
 
   c.close(); // Liberar memória
 }
