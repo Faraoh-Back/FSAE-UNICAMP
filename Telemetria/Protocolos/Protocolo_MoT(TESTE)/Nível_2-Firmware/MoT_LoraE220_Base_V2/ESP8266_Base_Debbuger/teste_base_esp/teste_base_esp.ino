@@ -1,11 +1,11 @@
 #include <SoftwareSerial.h>
 
 // Pinos
-#define LORA_TX_PIN D3   // GPIO13
-#define LORA_RX_PIN D4   // GPIO12
-#define PIN_AUX D5       // GPIO14
-#define PIN_M0  D7       // GPIO5
-#define PIN_M1  D6       // GPIO4  <-- ATENÇÃO: Corrigi o pino para D2/GPIO4 para ser único.
+#define LORA_TX_PIN D3   
+#define LORA_RX_PIN D4   
+#define PIN_AUX D5       
+#define PIN_M0  D7       
+#define PIN_M1  D6       
 
 SoftwareSerial loraSerial(LORA_RX_PIN, LORA_TX_PIN); // RX, TX
 

@@ -8,7 +8,7 @@ print("--- Iniciando Script LoRa (Raspberry Pi) ---")
 SERIAL_PORT = "/dev/serial0"
 BAUDRATE = 9600
 PIN_M0 = 17
-PIN_M1 = 18 # ATENÇÃO: Corrigi o pino M1 para 25, como no seu código original
+PIN_M1 = 18 
 PIN_AUX = 27
 
 # --- Funções ---
@@ -29,7 +29,7 @@ def configure_module(ser, pin_m0, pin_m1):
     
     # 1. Entra no modo de configuração
     set_lora_mode(2, pin_m0, pin_m1)
-    time.sleep(0.1)
+    time.sleep(0.5)
 
     # 2. Monta o EXATO MESMO pacote de configuração do ESP8266
     config_packet = bytearray([
@@ -39,11 +39,11 @@ def configure_module(ser, pin_m0, pin_m1):
     # 3. Envia o pacote de configuração
     ser.write(config_packet)
     print(f"Pacote de configuracao enviado: {config_packet.hex()}")
-    time.sleep(0.2)
+    time.sleep(0.5)
 
     # 4. Volta para o modo normal
     set_lora_mode(0, pin_m0, pin_m1)
-    time.sleep(0.1)
+    time.sleep(0.5)
     
     print("--- CONFIGURACAO CONCLUIDA ---")
 
