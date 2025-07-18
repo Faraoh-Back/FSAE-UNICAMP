@@ -108,50 +108,6 @@ def read_new_data():
     except Exception as e:
         print(f"Erro ao ler arquivo: {e}")
 
-# def read_serial():
-#     global df_all
-#     ser = MockSerial()
-#     try:
-#         while True:
-#             with lock:
-#                 line = ser.readline().decode('utf-8').strip()
-#                 sigla, valor = converter_dados(line)
-#                 if sigla:
-#                     df_new = pd.DataFrame({
-#                         "Load Cell": [sigla],
-#                         "Weight": [valor],
-#                         "Mean": [0],
-#                         "interval": [0],
-#                     })
-#                     df_all = pd.concat([df_all, df_new], ignore_index=True)
-#             time.sleep(1)
-#     except Exception as e:
-#         print(f"Erro na simulação: {e}")
-
-#Dados Mockados (Random)
-# def read_serial():
-#     global df_all
-#     with lock:
-#         try:
-#             while True:
-#                 for sigla in ['FL', 'FR', 'RR', 'RL']:
-#                     valor = random.random()*100
-#                     df_new = pd.DataFrame({
-#                             "Load Cell": [sigla],  # Criando valores de 1 a 4
-#                             "Weight": valor,
-#                             "Mean": 0,
-#                             "interval": 0,
-#                         }) # Define "Load Cell" como índice
-#                         # df_new['Interval'] = count
-#                     df_all = pd.concat([df_all, df_new])
-#                 time.sleep(1)
-
-#         except serial.SerialException as e:
-#             print(f'Erro na conexão: {e}')
-# Tente carregar o arquivo Excel, se não existir use uma lista vazia
-
-
-
 # Inicializando o app Dash
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.LUX, dbc.icons.FONT_AWESOME])
 
