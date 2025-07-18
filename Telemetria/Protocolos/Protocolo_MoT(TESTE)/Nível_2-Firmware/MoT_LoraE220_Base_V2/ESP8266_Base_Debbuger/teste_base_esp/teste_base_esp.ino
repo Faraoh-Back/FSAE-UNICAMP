@@ -1,11 +1,11 @@
 #include <SoftwareSerial.h>
 
 // Pinos
-#define LORA_TX_PIN D3   
-#define LORA_RX_PIN D4   
+#define LORA_TX_PIN D6   
+#define LORA_RX_PIN D7   
 #define PIN_AUX D5       
-#define PIN_M0  D7       
-#define PIN_M1  D6       
+#define PIN_M0  D1       
+#define PIN_M1  D2       
 
 SoftwareSerial loraSerial(LORA_RX_PIN, LORA_TX_PIN); // RX, TX
 
