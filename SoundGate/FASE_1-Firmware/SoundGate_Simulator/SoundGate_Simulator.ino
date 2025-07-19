@@ -43,8 +43,6 @@ void loop() {
       tempoDaUltimaVolta = tempoAtual;
     }
     
-    // Incrementa o número de voltas
-    voltas++;
     
     // --- Geração de Dados Falsos ---
     // Gera uma distância aleatória entre 45.00 e 65.00 cm
@@ -62,6 +60,7 @@ void loop() {
     
     // Distância (agora com o valor falso)
     Serial.print(distanciaFalsa);
+    Serial.print(" cm");
     Serial.print(",");
     
     // Tempo de Volta (em segundos com 3 casas decimais)
@@ -70,13 +69,15 @@ void loop() {
     if (tempoDeVoltaMs % 1000 < 100) Serial.print("0");
     if (tempoDeVoltaMs % 1000 < 10) Serial.print("0");
     Serial.print(tempoDeVoltaMs % 1000);
+    Serial.print(" seg");
     Serial.print(",");
-
+    
     // Tempo Total (formato X min Y seg)
-    unsigned long totalSeg = tempoTotalMs / 1000;
-    Serial.print(totalSeg / 60);
-    Serial.print(" min ");
-    Serial.print(totalSeg % 60);
+    Serial.print(tempoTotalMs / 1000);
+    Serial.print(".");
+    if (tempoTotalMs % 1000 < 100) Serial.print("0");
+    if (tempoTotalMs % 1000 < 10) Serial.print("0");
+    Serial.print(tempoTotalMs % 1000);
     Serial.println(" seg");
     
     // --- Fim do Bloco de Impressão ---
@@ -86,5 +87,9 @@ void loop() {
     
     // Agenda a próxima passagem para daqui a 4 ou 5 segundos
     proximaPassagem = millis() + random(4000, 5001); // random(min, max) -> max é exclusivo
+    
+    // Incrementa o número de voltas
+    voltas++;
+
   }
 }

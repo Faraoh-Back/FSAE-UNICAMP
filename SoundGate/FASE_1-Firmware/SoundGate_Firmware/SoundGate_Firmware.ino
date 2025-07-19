@@ -58,13 +58,10 @@ void loop() {
         Serial.println("Carro identificado. Iniciando cronometragem...");
       }
       
-      // Incrementa o número de voltas
-      voltas++;
-      
       // Calcula os tempos
       unsigned long tempoDeVoltaMs = tempoAtual - tempoDaUltimaVolta;
       unsigned long tempoTotalMs = tempoAtual - tempoInicial;
-
+      
       // --- Impressão dos Dados no formato CSV ---
       
       // Volta
@@ -73,6 +70,7 @@ void loop() {
       
       // Distância
       Serial.print(distanciaCm);
+      Serial.print(" cm");
       Serial.print(",");
       
       // Tempo de Volta (em segundos com 3 casas decimais)
@@ -81,18 +79,23 @@ void loop() {
       if (tempoDeVoltaMs % 1000 < 100) Serial.print("0");
       if (tempoDeVoltaMs % 1000 < 10) Serial.print("0");
       Serial.print(tempoDeVoltaMs % 1000);
+      Serial.print(" seg");
       Serial.print(",");
-
+      
       // Tempo Total (formato X min Y seg)
-      unsigned long totalSeg = tempoTotalMs / 1000;
-      Serial.print(totalSeg / 60);
-      Serial.print(" min ");
-      Serial.print(totalSeg % 60);
+      Serial.print(tempoTotalMs / 1000);
+      Serial.print(".");
+      if (tempoTotalMs % 1000 < 100) Serial.print("0");
+      if (tempoTotalMs % 1000 < 10) Serial.print("0");
+      Serial.print(tempoTotalMs % 1000);
       Serial.println(" seg");
       
       // Atualiza os marcadores de tempo para a próxima volta
       tempoDaUltimaVolta = tempoAtual;
       tempoUltimaDeteccao = tempoAtual;
+
+      // Incrementa o número de voltas
+      voltas++;
     }
   }
 }

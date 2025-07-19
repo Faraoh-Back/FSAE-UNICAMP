@@ -5,9 +5,8 @@ import pandas as pd
 import serial.tools.list_ports
 import json
 import os
-import time
 from datetime import datetime
-import subprocess # Para chamar o script de processamento
+import subprocess
 
 # --- Configurações ---
 PASTA_ARMAZENAMENTO = os.path.join(os.path.dirname(__file__), '..', 'FASE_3-Armazenamento')
@@ -16,15 +15,13 @@ ARQUIVO_PARAMETROS = os.path.join(PASTA_ARMAZENAMENTO, 'parametros.json')
 ARQUIVO_METRICAS = os.path.join(PASTA_ARMAZENAMENTO, 'metricas.json')
 SCRIPT_PROCESSADOR = os.path.join(os.path.dirname(__file__), '..', 'FASE_4-Tratamento_Dados', 'processador.py')
 
-# Garante que a pasta de armazenamento exista
 if not os.path.exists(PASTA_ARMAZENAMENTO):
     os.makedirs(PASTA_ARMAZENAMENTO)
 
-# --- Inicialização do App Dash ---
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE])
 app.title = "SoundGate Dashboard"
 
-# --- Layout do Dashboard ---
+# --- Layout (sem alteração) ---
 def criar_layout():
     portas_seriais = [port.device for port in serial.tools.list_ports.comports()]
     
@@ -32,11 +29,7 @@ def criar_layout():
         dcc.Store(id='store-parametros'),
         dcc.Interval(id='intervalo-atualizacao', interval=2 * 1000, n_intervals=0),
         dcc.Download(id="download-csv"),
-
-        # --- Título ---
         html.H1("SoundGate Dashboard FSAE", className="text-center text-primary mt-3 mb-4"),
-
-        # --- Painel de Controle ---
         dbc.Card(className="mb-4", body=True, children=[
             dbc.Row([
                 dbc.Col(dbc.Label("Porta Serial:"), width=2),
@@ -52,10 +45,7 @@ def criar_layout():
                 dbc.Col(html.Div(id='status-coleta', className="text-center fw-bold"))
             ])
         ]),
-
-        # --- Visualização de Dados ---
         dbc.Row([
-            # Coluna da Tabela de Voltas
             dbc.Col(width=7, children=[
                 dbc.Card(body=True, children=[
                     html.H4("Tabela de Voltas", className="card-title"),
@@ -69,7 +59,6 @@ def criar_layout():
                     ])
                 ])
             ]),
-            # Coluna das Métricas
             dbc.Col(width=5, children=[
                 dbc.Card(body=True, children=[
                     html.H4("Métricas Gerais", className="card-title"),
@@ -77,8 +66,6 @@ def criar_layout():
                 ])
             ])
         ]),
-        
-        # --- Download e Parametrização ---
         dbc.Card(className="mt-4", body=True, children=[
             html.H4("Download e Parametrização", className="card-title"),
             html.P("Adicione parâmetros para nomear o arquivo de download."),
@@ -90,45 +77,7 @@ def criar_layout():
 
 app.layout = criar_layout
 
-# --- Callbacks ---
-
-# 1. Controlar início/parada da coleta
-@app.callback(
-    Output('status-coleta', 'children'),
-    Input('btn-iniciar', 'n_clicks'),
-    Input('btn-parar', 'n_clicks'),
-    State('dropdown-porta-serial', 'value'),
-    State('input-baud-rate', 'value'),
-    prevent_initial_call=True
-)
-def controlar_coleta(n_iniciar, n_parar, porta, baud):
-    ctx = callback_context
-    if not ctx.triggered:
-        return "Aguardando comando..."
-
-    button_id = ctx.triggered[0]['prop_id'].split('.')[0]
-    
-    if button_id == 'btn-iniciar':
-        if not porta:
-            return dbc.Alert("ERRO: Nenhuma porta serial selecionada!", color="warning")
-        
-        config = {'rodando': True, 'porta_serial': porta, 'baud_rate': int(baud)}
-        with open(ARQUIVO_PARAMETROS, 'w') as f:
-            json.dump(config, f)
-        
-        # Limpa arquivos antigos
-        if os.path.exists(ARQUIVO_DADOS_BRUTOS): os.remove(ARQUIVO_DADOS_BRUTOS)
-        if os.path.exists(ARQUIVO_METRICAS): os.remove(ARQUIVO_METRICAS)
-            
-        return dbc.Alert(f"Coleta iniciada na porta {porta}", color="success")
-        
-    elif button_id == 'btn-parar':
-        config = {'rodando': False}
-        with open(ARQUIVO_PARAMETROS, 'w') as f:
-            json.dump(config, f)
-        return dbc.Alert("Coleta parada.", color="danger")
-
-# 2. Atualizar tabela de voltas e acionar o processador de dados
+# --- Callback ATUALIZADO (simplificado) ---
 @app.callback(
     Output('tabela-voltas', 'columns'),
     Output('tabela-voltas', 'data'),
@@ -139,33 +88,61 @@ def controlar_coleta(n_iniciar, n_parar, porta, baud):
 def atualizar_dados_e_metricas(n, status):
     try:
         df = pd.read_csv(ARQUIVO_DADOS_BRUTOS)
+        if df.empty:
+             return [], [], "Nenhum dado coletado ainda."
+        
+        # Define as colunas dinamicamente a partir do DataFrame (sem formatação especial)
         columns = [{"name": i, "id": i} for i in df.columns]
         data = df.to_dict('records')
         
-        # Chama o script processador em background
-        subprocess.run(['python', SCRIPT_PROCESSADOR, PASTA_ARMAZENAMENTO], check=True)
+        # Executa o processador (que agora sabe limpar os dados)
+        subprocess.run(['python3', SCRIPT_PROCESSADOR, PASTA_ARMAZENAMENTO], check=True)
         
-        # Lê as métricas geradas
+        # Lê as métricas
         with open(ARQUIVO_METRICAS, 'r') as f:
             metricas = json.load(f)
         
+        # Exibe as métricas
         metricas_layout = [
             dbc.Row([dbc.Col(html.Strong("Total de Voltas:")), dbc.Col(metricas['total_voltas'])]),
-            dbc.Row([dbc.Col(html.Strong("Melhor Volta (s):")), dbc.Col(metricas['melhor_volta'])]),
-            dbc.Row([dbc.Col(html.Strong("Pior Volta (s):")), dbc.Col(metricas['pior_volta'])]),
-            dbc.Row([dbc.Col(html.Strong("Média das Voltas (s):")), dbc.Col(metricas['media_voltas'])]),
-            dbc.Row([dbc.Col(html.Strong("Desvio Padrão (s):")), dbc.Col(metricas['desvio_padrao'])]),
+            dbc.Row([dbc.Col(html.Strong("Melhor Volta (s):")), dbc.Col(f"{metricas['melhor_volta']:.3f}")]),
+            dbc.Row([dbc.Col(html.Strong("Pior Volta (s):")), dbc.Col(f"{metricas['pior_volta']:.3f}")]),
+            dbc.Row([dbc.Col(html.Strong("Média das Voltas (s):")), dbc.Col(f"{metricas['media_voltas']:.3f}")]),
+            dbc.Row([dbc.Col(html.Strong("Desvio Padrão (s):")), dbc.Col(f"{metricas['desvio_padrao']:.3f}")]),
         ]
         
     except (FileNotFoundError, pd.errors.EmptyDataError):
-        # Se os arquivos não existem ou estão vazios
         return [], [], "Nenhum dado coletado ainda."
     except Exception as e:
         return [], [], f"Erro ao processar dados: {e}"
         
     return columns, data, metricas_layout
 
-# 3. Adicionar campos de parâmetro dinamicamente
+# ... (o resto dos callbacks continua o mesmo) ...
+@app.callback(
+    Output('status-coleta', 'children'),
+    Input('btn-iniciar', 'n_clicks'),
+    Input('btn-parar', 'n_clicks'),
+    State('dropdown-porta-serial', 'value'),
+    State('input-baud-rate', 'value'),
+    prevent_initial_call=True
+)
+def controlar_coleta(n_iniciar, n_parar, porta, baud):
+    ctx = callback_context
+    button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+    if button_id == 'btn-iniciar':
+        if not porta: return dbc.Alert("ERRO: Nenhuma porta serial selecionada!", color="warning")
+        config = {'rodando': True, 'porta_serial': porta, 'baud_rate': int(baud)}
+        with open(ARQUIVO_PARAMETROS, 'w') as f: json.dump(config, f)
+        if os.path.exists(ARQUIVO_DADOS_BRUTOS): os.remove(ARQUIVO_DADOS_BRUTOS)
+        if os.path.exists(ARQUIVO_METRICAS): os.remove(ARQUIVO_METRICAS)
+        return dbc.Alert(f"Coleta iniciada na porta {porta}", color="success")
+    elif button_id == 'btn-parar':
+        config = {'rodando': False}
+        with open(ARQUIVO_PARAMETROS, 'w') as f: json.dump(config, f)
+        return dbc.Alert("Coleta parada.", color="danger")
+    return "Aguardando comando..."
+
 @app.callback(
     Output('parametros-container', 'children'),
     Input('btn-add-param', 'n_clicks'),
@@ -179,7 +156,6 @@ def adicionar_parametro(n_clicks, children):
     children.append(novo_param)
     return children
 
-# 4. Baixar CSV com nome parametrizado
 @app.callback(
     Output('download-csv', 'data'),
     Input('btn-baixar-csv', 'n_clicks'),
@@ -189,11 +165,8 @@ def adicionar_parametro(n_clicks, children):
 def baixar_csv(n_clicks, params_children):
     try:
         df = pd.read_csv(ARQUIVO_DADOS_BRUTOS)
-        
-        # Constrói o nome do arquivo
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename_parts = [now]
-        
         if params_children:
             for child in params_children:
                 try:
@@ -201,15 +174,11 @@ def baixar_csv(n_clicks, params_children):
                     valor = child['props']['children'][1]['props']['children']['props']['value']
                     if nome and valor:
                         filename_parts.append(f"{nome.replace(' ', '_')}:{valor.replace(' ', '_')}")
-                except (KeyError, TypeError):
-                    continue
-        
+                except (KeyError, TypeError): continue
         filename = "_".join(filename_parts) + ".csv"
-        
         return dcc.send_data_frame(df.to_csv, filename, index=False)
-        
     except (FileNotFoundError, pd.errors.EmptyDataError):
-        return None # Não faz nada se não houver dados
+        return None
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=True)
