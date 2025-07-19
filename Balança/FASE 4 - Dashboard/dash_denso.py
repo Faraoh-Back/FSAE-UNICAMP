@@ -14,6 +14,7 @@ from dash.dependencies import Input, Output, State
 import plotly.express as px
 import glob
 from dash.dash_table.Format import Format
+from pathlib import Path # Adicionado
 
 lock = threading.Lock()
 df_new = pd.DataFrame(columns = ['Load Cell', 'Weight', 'Mean', 'interval'])  
@@ -25,8 +26,18 @@ df_all = pd.DataFrame({
 })  
 gradient_colors = ["#7EC8E3", "#4682B4", "#1E3A5F", "#0D1B2A"]
 
-# Configurações do arquivo de dados
-DIRETORIO_DADOS = r"C:\Users\Otaldo\OneDrive\Organizar Pessoal OneDrive\Documentos\Finalmente\FSAE_Balança\FASE 3 - Armazenamento"
+# --- Definição de Caminhos Relativos ---
+# Encontra o diretório raiz do projeto ("Balança"), subindo um nível a partir do script
+project_root = Path(__file__).parent.parent
+
+# Define o caminho para a pasta de dados do IDLE
+DIRETORIO_DADOS = project_root / "FASE 2 - IDLE" / "dados"
+
+# Define o caminho para o arquivo Excel de setups
+excel_path = project_root / "FASE 4 - Dashboard" / "Resultados - Aeromap.xlsx"
+
+# --- Fim da Definição de Caminhos ---
+
 ULTIMO_ARQUIVO = None
 ULTIMA_POSICAO = 0
 OUTPUT_FILENAME = "saved_data.txt"
@@ -37,7 +48,6 @@ last_save_timestamp = None
 current_measurements = []
 
 try:
-    excel_path = r"C:\Users\Otaldo\OneDrive\Organizar Pessoal OneDrive\Documentos\Finalmente\FSAE_Balança\FASE 4 - Dashboard\Resultados - Aeromap.xlsx"
     setups = pd.ExcelFile(excel_path)
     sheet_names = [i for i in setups.sheet_names if 'Setup Asa' in i]
 except FileNotFoundError:
@@ -47,6 +57,7 @@ except FileNotFoundError:
 except Exception as e:
     print(f"Erro ao carregar arquivo Excel: {e}")
     sheet_names = []
+
 
 def get_latest_data_file():
     "Encontra o arquivo de dados mais recente no diretório"

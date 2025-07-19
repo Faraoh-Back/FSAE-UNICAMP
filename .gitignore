@@ -1,0 +1,27 @@
+# Ambientes Virtuais
+# ---------------------------
+.venv/
+venv/
+env/
+
+# Cache e arquivos compilados do Python
+# ---------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pasta de armazenamento de dados gerados
+# IMPORTANTE: Para que o git não salve os arquivos .csv e .json gerados
+# ---------------------------
+FASE_3-Armazenamento/
+
+# Arquivos de configuração de IDEs e editores
+# ---------------------------
+.vscode/
+.idea/
+
+# Arquivos do sistema operacional
+# ---------------------------
+.DS_Store
+Thumbs.db

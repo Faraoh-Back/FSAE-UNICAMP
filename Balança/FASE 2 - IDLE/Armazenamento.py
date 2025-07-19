@@ -2,9 +2,11 @@ import os
 import serial
 import time
 import datetime
+from pathlib import Path
 
 # Configurações
-DIRETORIO_DADOS = r"C:\Users\Otaldo\OneDrive\Organizar Pessoal OneDrive\Documentos\Finalmente\FSAE_Balança\FASE 3 - Armazenamento"
+diretorio_do_script = Path(__file__).parent
+DIRETORIO_DADOS = diretorio_do_script / "dados"
 os.makedirs(DIRETORIO_DADOS, exist_ok=True)
 
 # Gerar nome do arquivo

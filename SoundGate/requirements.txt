@@ -1,0 +1,4 @@
+pyserial
+pandas
+dash
+dash-bootstrap-components
