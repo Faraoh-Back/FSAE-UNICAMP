@@ -23,19 +23,47 @@ RECEIVER_ID = 8
 TRANSMITTER_ID = 10
 
 def get_client_rssi(client_ip):
-    """Executa um comando no sistema para obter o RSSI de um cliente conectado."""
+    """
+    Executa um comando no sistema para obter o RSSI de um cliente conectado.
+    Agora com mensagens de debug detalhadas.
+    """
+    interface = "wlan0" # Interface WiFi da Pi
+    command = ["iw", "dev", interface, "station", "dump"]
+    
     try:
-        result = subprocess.check_output(["iw", "dev", "wlan0", "station", "dump"], text=True)
-        station_block = None
+        # Executa o comando e captura a saída
+        result = subprocess.check_output(command, text=True, stderr=subprocess.PIPE)
+        
+        # --- DEBUG: Imprime a saída completa do comando ---
+        print("\n--- Saida do comando 'iw' ---")
+        print(result)
+        print("----------------------------")
+
+        station_block_started = False
         for line in result.splitlines():
+            # Procura pela linha que identifica a estação pelo IP do cliente
             if client_ip in line:
-                station_block = line
-            if station_block and "signal avg" in line:
+                station_block_started = True
+            
+            # Uma vez que encontramos o bloco do nosso cliente, procuramos pelo sinal
+            if station_block_started and "signal avg" in line:
+                # Extrai o valor do sinal, ex: '	signal avg:	-42 dBm'
                 rssi = int(line.split(':')[1].strip().split(' ')[0])
+                print(f"[Debug RSSI] Valor encontrado: {rssi} dBm")
                 return rssi
-    except Exception:
-        pass
-    return 0
+                
+        print("[Debug RSSI] Cliente encontrado, mas informacao de 'signal avg' nao localizada.")
+        return 0
+
+    except FileNotFoundError:
+        print("ERRO DE DEBUG: O comando 'iw' nao foi encontrado. Instale com 'sudo apt-get install iw'")
+        return 0
+    except subprocess.CalledProcessError as e:
+        print(f"ERRO DE DEBUG: O comando 'iw' falhou com o erro: {e.stderr}")
+        return 0
+    except Exception as e:
+        print(f"ERRO DE DEBUG: Erro inesperado ao tentar obter o RSSI: {e}")
+        return 0
 
 # --- Execução Principal ---
 if __name__ == "__main__":
