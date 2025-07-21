@@ -24,31 +24,45 @@ TRANSMITTER_ID = 10
 
 def get_client_rssi(client_ip):
     """
-    Executa o comando 'iw' e procura pelo campo 'signal:' para obter o RSSI.
+    Executa um comando no sistema para obter o RSSI de um cliente conectado.
+    Agora com mensagens de debug detalhadas.
     """
-    interface = "wlan0"
+    interface = "wlan0" # Interface WiFi da Pi
     command = ["iw", "dev", interface, "station", "dump"]
     
     try:
+        # Executa o comando e captura a saída
         result = subprocess.check_output(command, text=True, stderr=subprocess.PIPE)
         
+        # --- DEBUG: Imprime a saída completa do comando ---
+        print("\n--- Saida do comando 'iw' ---")
+        print(result)
+        print("----------------------------")
+
         station_block_started = False
         for line in result.splitlines():
             # Procura pela linha que identifica a estação pelo IP do cliente
             if client_ip in line:
                 station_block_started = True
             
-            # --- MUDANÇA PRINCIPAL AQUI ---
-            # Trocamos "signal avg" por "signal:" para corresponder à saída do seu sistema
-            if station_block_started and "signal:" in line:
-                # Extrai o valor do sinal, ex: '	signal:	-42 dBm'
+            # Uma vez que encontramos o bloco do nosso cliente, procuramos pelo sinal
+            if station_block_started and "signal" in line:
+                # Extrai o valor do sinal, ex: '	signal avg:	-42 dBm'
                 rssi = int(line.split(':')[1].strip().split(' ')[0])
+                print(f"[Debug RSSI] Valor encontrado: {rssi} dBm")
                 return rssi
                 
-        return 0 # Retorna 0 se o cliente foi encontrado, mas a linha de sinal não
+        print("[Debug RSSI] Cliente encontrado, mas informacao de 'signal avg' nao localizada.")
+        return 0
 
+    except FileNotFoundError:
+        print("ERRO DE DEBUG: O comando 'iw' nao foi encontrado. Instale com 'sudo apt-get install iw'")
+        return 0
+    except subprocess.CalledProcessError as e:
+        print(f"ERRO DE DEBUG: O comando 'iw' falhou com o erro: {e.stderr}")
+        return 0
     except Exception as e:
-        # Se ocorrer qualquer erro, retorna 0
+        print(f"ERRO DE DEBUG: Erro inesperado ao tentar obter o RSSI: {e}")
         return 0
 
 # --- Execução Principal ---
