@@ -49,6 +49,13 @@ void setup() {
 }
 
 void loop() {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi desconectado! Tentando reconectar...");
+    WiFi.reconnect();
+    delay(1000);
+    return;
+  }
+
   unsigned long tempo_atual = millis();
 
   if (tempo_atual - tempo_anterior >= INTERVALO_PING) {
