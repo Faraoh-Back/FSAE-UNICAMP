@@ -46,7 +46,7 @@ def get_client_rssi(client_ip):
                 station_block_started = True
             
             # Uma vez que encontramos o bloco do nosso cliente, procuramos pelo sinal
-            if station_block_started and "signal" in line:
+            if station_block_started and "signal:" in line:
                 # Extrai o valor do sinal, ex: '	signal avg:	-42 dBm'
                 rssi = int(line.split(':')[1].strip().split(' ')[0])
                 print(f"[Debug RSSI] Valor encontrado: {rssi} dBm")
