@@ -41,7 +41,6 @@ def get_client_rssi(client_ip):
 
         station_block_started = False
         for line in result.splitlines():
-            # Procura pela linha que identifica a estação pelo IP do cliente
             if client_ip in line:
                 station_block_started = True
             
@@ -51,6 +50,7 @@ def get_client_rssi(client_ip):
                 rssi = int(line.split(':')[1].strip().split(' ')[0])
                 print(f"[Debug RSSI] Valor encontrado: {rssi} dBm")
                 return rssi
+            
                 
         print("[Debug RSSI] Cliente encontrado, mas informacao de 'signal avg' nao localizada.")
         return 0
