@@ -1,166 +1,23 @@
-GUIA DE CONFIGURAÇÃO: TELEMETRIA NA RASPBERRY PI DO ZERO
-
-Objetivo: Configurar uma Raspberry Pi para ler dados de uma rede CAN, processá-los com um script Python e armazená-los localmente em um arquivo CSV.
-
-Fase 0: Pré-requisitos (Hardware)
-
-Antes de ligar a Raspberry Pi, garanta que você tem e conectou o seguinte:
-
-    Raspberry Pi: Qualquer modelo com o conector de 40 pinos (3, 4, 5, etc.).
-
-    Sistema Operacional: Raspberry Pi OS (anteriormente Raspbian) instalado em um cartão SD.
-
-    Módulo Transceptor CAN: Um hardware que converte os sinais da Pi para o padrão da rede CAN. O mais comum é um módulo baseado no chip MCP2515. O seu código usa a interface can0, que depende deste tipo de hardware.
-
-    Fiação (Exemplo para Módulo MCP2515 via SPI):
-
-        Conecte o módulo MCP2515 na Raspberry Pi da seguinte forma (os pinos podem variar um pouco dependendo do seu módulo, mas este é o padrão):
-
-Pino do Módulo MCP2515	Conexão na Raspberry Pi (Pino Físico)	GPIO (BCM)
-VCC	3.3V Power (Pino 1)	-
-GND	Ground (Pino 6)	-
-CS (Chip Select)	Pino 24	GPIO8 (SPI0_CE0)
-SCK (Serial Clock)	Pino 23	GPIO11 (SPI0_SCLK)
-MOSI (Master Out)	Pino 19	GPIO10 (SPI0_MOSI)
-MISO (Master In)	Pino 21	GPIO9 (SPI0_MISO)
-INT (Interrupt)	Pino 22	GPIO25
-CAN_H / CAN_L	-	Conectar à sua rede CAN (ECU)
-
-Fase 1: Configuração do Sistema Operacional
-
-Agora, vamos ligar a Pi e preparar o sistema para reconhecer o hardware CAN.
-
-1.1. Abrir o Terminal
-
-    Ligue a Raspberry Pi. Você pode fazer os passos seguintes diretamente com um monitor e teclado ou remotamente via SSH.
-
-1.2. Habilitar a Interface SPI
-
-    O módulo CAN se comunica via SPI. Vamos ativá-la.
-    Bash
-
-    sudo raspi-config
-
-    No menu, navegue até Interface Options -> SPI.
-
-    Selecione <Yes> para habilitar a interface SPI e saia do raspi-config.
-
-1.3. Configurar o Módulo CAN no Sistema
-
-    Precisamos dizer ao sistema operacional para carregar o driver do nosso módulo.
-
-    Abra o arquivo de configuração de boot:
-    Bash
-
-    sudo nano /boot/firmware/config.txt
-
-    (Nota: Em versões mais antigas do Raspberry Pi OS, o caminho pode ser /boot/config.txt)
-
-    Vá até o final do arquivo e adicione as seguintes linhas:
-
-    # Habilita o driver do módulo CAN MCP2515
-    dtparam=spi=on
-    dtoverlay=mcp2515-can0,oscillator=8000000,interrupt=25
-
-        oscillator=8000000: Frequência do cristal no seu módulo (8 MHz é o mais comum). Verifique o seu módulo se tiver problemas.
-
-        interrupt=25: O pino GPIO que você conectou ao pino INT do módulo.
-
-    Pressione Ctrl+X, depois Y e Enter para salvar e fechar.
-
-1.4. Reiniciar e Verificar
-
-    Reinicie a Pi para que as mudanças tenham efeito:
-    Bash
-
-sudo reboot
-
-Após reiniciar, abra o terminal e verifique se a interface can0 foi criada:
-Bash
-
-    ip link show can0
-
-    Se o comando funcionar e mostrar detalhes da interface can0 (mesmo que esteja em estado "DOWN"), a configuração do sistema foi um sucesso.
-
-Fase 2: Instalação das Dependências (Software)
-
-Vamos instalar as ferramentas e bibliotecas Python necessárias.
-
-2.1. Atualizar o Sistema e Instalar can-utils
-
-    can-utils é um pacote de ferramentas de linha de comando para testar a rede CAN. É extremamente útil para diagnóstico.
-    Bash
-
-    sudo apt-get update
-    sudo apt-get install can-utils
-
-2.2. Instalar as Bibliotecas Python
-
-    Vamos usar o pip (gerenciador de pacotes do Python) para instalar o que nosso script precisa.
-    Bash
-
-    sudo pip3 install python-can
-    sudo pip3 install gpiozero
-
-Fase 3: Preparação do Código
-
-Agora, vamos colocar seu script na Raspberry Pi.
-
-3.1. Criar a Pasta do Projeto e o Arquivo
-
-    No terminal, crie uma pasta para organizar seu projeto e entre nela:
-    Bash
-
-mkdir ~/telemetria
-cd ~/telemetria
-
-Crie o arquivo Python usando o editor de texto nano:
-Bash
-
-    nano coletor_e_armazenador.py
-
-3.2. Colar o Código
-
-    Copie o código completo e funcional do coletor_e_armazenador.py que te enviei na resposta anterior.
-
-    Cole-o dentro do editor nano.
-
-    Pressione Ctrl+X, depois Y e Enter para salvar e fechar.
-
-Fase 4: Execução
-
-Tudo está pronto. Vamos rodar!
-
-4.1. "Ligar" a Interface CAN
-
-    A interface can0 existe, mas precisa ser ativada e configurada com a velocidade da sua rede CAN. A velocidade de 500 kbps é muito comum em carros.
-    Bash
-
-    sudo ip link set can0 up type can bitrate 500000
-
-    (Nota: Se a sua ECU usar uma velocidade diferente, como 250kbps, altere o valor 500000 para 250000)
-
-4.2. (Opcional, mas Recomendado) Teste com cansniffer
-
-    Antes de rodar seu script, faça um teste rápido para ver se os dados da ECU estão chegando.
-    Bash
-
-    cansniffer can0
-
-    Se você vir linhas de dados aparecendo na tela, significa que sua conexão física e a configuração do sistema estão perfeitas. Pressione Ctrl+C para sair. Se nada aparecer, revise a fiação e a velocidade (bitrate).
-
-4.3. Executar o Script Principal
-
-    Finalmente, execute o seu script de coleta e armazenamento:
-    Bash
+sudo apt update
+sudo apt full-upgrade -y
+
+sudo raspi-config
+Navegue até Interface Options -> SPI e habilite-a.
+
+sudo nano /boot/firmware/config.txt
+Adicione as seguintes linhas no final do arquivo:
+dtparam=spi=on
+dtoverlay=mcp2515-can0,oscillator=8000000,interrupt=25
+
+sudo apt install can-utils -y
+pip3 install python-can supabase
+
+Rode em dois terminais separados
+No Terminal 1 - Ative a Rede CAN: Faça isso apenas uma vez após cada reinicialização.
+# Use o bitrate correto para sua ECU, 500kbps é comum
+sudo ip link set can0 up type can bitrate 500000
 
 python3 coletor_e_armazenador.py
 
-O que esperar: Você verá as mensagens "INICIANDO PROCESSO...", "Interface CAN iniciada...", etc. O script ficará rodando em silêncio, lendo os dados e salvando no arquivo.
-
-Para verificar o resultado: Deixe o script rodando por um tempo, depois abra um segundo terminal, navegue até a pasta ~/telemetria e use o comando tail para ver as últimas linhas salvas no seu arquivo de log:
-Bash
-
-tail -f telemetry_data.csv
-
-Você deverá ver as linhas de dados sendo adicionadas em tempo real. Pressione Ctrl+C para parar o tail. Para parar o script principal, volte ao primeiro terminal e pressione Ctrl+C.
+No Terminal 2 - Rode o Nível 2 (Uploader):
+python3 firmware_transmissor.py

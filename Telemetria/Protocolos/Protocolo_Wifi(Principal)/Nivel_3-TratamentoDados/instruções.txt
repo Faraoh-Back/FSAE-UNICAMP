@@ -1,0 +1,5 @@
+pip install pandas supabase dash dash-bootstrap-components plotly
+
+python3 processador.py
+
+python3 dashboard.py
