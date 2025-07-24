@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Telemetria FSAE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right, #100c14, #18141c); /* Gradiente atualizado */
+            color: #ffffff; /* Cor do texto geral agora é branco puro */
+            height: 100vh; /* Altura fixa para a viewport */
+            overflow-x: hidden; /* Evita rolagem horizontal */
+        }
+        /* Estilo para o contêiner principal da dashboard */
+        .main-layout {
+            display: flex;
+            flex-direction: column; /* Colunas empilhadas por padrão em telas pequenas */
+            align-items: center; /* Centraliza o conteúdo principal */
+            gap: 1rem; /* Espaçamento reduzido */
+            margin: 0 auto; /* Centraliza o main-layout na página */
+            padding: 1rem; /* Adiciona padding para evitar que o conteúdo encoste nas bordas */
+        }
+        @media (min-width: 1024px) { 
+            .main-layout {
+                display: grid;
+                /* As colunas do topo continuam as mesmas */
+                grid-template-columns: 3fr 6fr 3fr; 
+                grid-template-rows: auto auto;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            /* Regras para a primeira linha (sem alterações) */
+            .dashboard-left-column { grid-column: 1; grid-row: 1; }
+            .dashboard-center-column { grid-column: 2; grid-row: 1; }
+            .dashboard-right-column { grid-column: 3; grid-row: 1; }
+
+            /* --- MUDANÇAS NA SEGUNDA LINHA --- */
+            .dashboard-bottom-left-block { 
+                grid-column: 1; 
+                grid-row: 2; 
+            }
+            .dashboard-bottom-right-block { 
+                /* O painel de sensores agora ocupa apenas a coluna central */
+                grid-column: 2; 
+                grid-row: 2; 
+            }
+
+            /* --- NOVA REGRA PARA O PAINEL DE GRAVAÇÃO --- */
+            .dashboard-bottom-far-right-block {
+                /* Coloca o painel de gravação na coluna da direita */
+                grid-column: 3;
+                grid-row: 2;
+                /* Estilos básicos para manter a consistência */
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                padding: 0.5rem;
+                width: 100%;
+                align-items: center;
+            }
+        }
+
+        /* Novas classes para as colunas do layout principal */
+        .dashboard-left-column,
+        .dashboard-center-column,
+        .dashboard-right-column,
+        .dashboard-bottom-left-block, /* Novo bloco para gravação */
+        .dashboard-bottom-right-block /* Novo bloco para sensores */
+        {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding: 0.5rem; /* Espaçamento interno para os blocos */
+            width: 100%; /* Ocupa a largura total da sua célula no grid */
+            align-items: center; /* Centraliza o conteúdo dentro de cada coluna */
+        }
+
+        /* Ajuste para a coluna da esquerda (agora com 1 gráfico) */
+        .dashboard-left-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 0.5rem;
+            width: 100%;
+        }
+
+        /* Painel de dados (o grid interno para os 8 cards) */
+        .data-panel {
+            display: grid; /* Usa grid para organizar os cards internos */
+            gap: 1rem; /* Espaçamento entre os cards, reduzido */
+            grid-template-columns: repeat(1, minmax(0, 1fr)); /* 1 coluna por padrão em telas pequenas */
+            width: 100%; /* Ocupa a largura total disponível */
+            background: linear-gradient(to right, #100c14, #18141c); /* Fundo do card de RPM agora é um gradiente */
+            padding: 0rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        @media (min-width: 768px) { /* Em telas médias, duas colunas */
+            .data-panel {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        @media (min-width: 1024px) { /* Em telas grandes, duas colunas (2x4) para cards maiores */
+            .data-panel {
+                grid-template-columns: repeat(2, minmax(0, 1fr)); /* Alterado de 4 para 2 colunas */
+                min-height: 16rem; /* Adicionado para garantir altura mínima para 3 linhas visuais */
+            }
+        }
+
+
+        /* Estilo para os cards de dados menores */
+        .data-card {
+            background-color: transparent; /* Fundo transparente */
+            border-radius: 0.75rem; /* Cantos arredondados */
+            padding: 0.75rem; /* Preenchimento interno reduzido */
+            box-shadow: none; /* Removida a sombra */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil para definir o card */
+        }
+        .data-label {
+            font-size: 0.9rem; /* Tamanho da fonte para o rótulo, reduzido */
+            font-weight: 600; /* Peso da fonte semi-negrito */
+            margin-bottom: 0.2rem; /* Espaçamento reduzido */
+            color: #ffffff; /* Cor do texto geral agora é branco puro */
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.5); /* Brilho sutil */
+        }
+        .data-value {
+            font-family: 'Orbitron', sans-serif; /* Aplicando Orbitron para os valores */
+            font-size: 1.8rem; /* Tamanho da fonte para o valor, reduzido */
+            font-weight: 700; /* Peso da fonte negrito */
+            /* A cor será definida via JavaScript */
+            transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out; /* Transição para a cor e sombra */
+        }
+        .unit {
+            font-size: 1.2rem; /* Tamanho da fonte para a unidade, reduzido */
+            color: #ffffff; /* Cor da unidade agora é branco puro */
+            margin-left: 0.2rem; /* Espaçamento reduzido */
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.5); /* Brilho sutil */
+        }
+
+        /* Estilo para as barras de progresso (para Combustível e Acelerador) */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #4a5568; /* Fundo da barra */
+            border-radius: 0.5rem;
+            overflow: hidden; /* Garante que o preenchimento seja arredondado */
+            height: 20px; /* Altura da barra */
+            margin-top: 0.5rem;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #ff0000; /* Cor de preenchimento da barra agora é vermelho */
+            width: 0%; /* Largura inicial */
+            border-radius: 0.5rem;
+            transition: width 0.3s ease-in-out; /* Transição suave para a barra */
+        }
+        .progress-card .data-value {
+            margin-bottom: 0.5rem; /* Espaçamento abaixo do valor nos cards com barra */
+        }
+
+        /* Estilo específico para o medidor de RPM (triângulo) */
+        .rpm-gauge-container {
+            width: 100%;
+            height: 80px; /* Altura fixa para o SVG do triângulo */
+            display: flex;
+            align-items: flex-end; /* Alinha o triângulo na parte inferior */
+            justify-content: center;
+            margin-top: 0.5rem;
+            overflow: hidden; /* Garante que o triângulo seja cortado dentro do contêiner */
+        }
+        #rpmGauge {
+            width: 100%;
+            height: 100%;
+        }
+        #rpmTriangle {
+            transition: fill 0.3s ease-in-out, points 0.3s ease-in-out; /* Transição suave para cor e forma */
+        }
+
+        /* Novo estilo para a logo pequena no topo central */
+        .top-center-logo {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 0.5rem; /* Espaçamento abaixo da logo */
+            margin-top: -3rem; /* Ajuste para mover ainda mais para cima */
+        }
+        .top-center-logo img {
+            width: 50px; /* Largura da logo (mesmo tamanho) */
+            height: auto; /* Altura automática para manter proporção */
+        }
+
+        /* Estilos para o card principal de telemetria (apenas o RPM) */
+        .main-telemetry-card {
+            background: linear-gradient(to right, #100c14, #18141c); /* Fundo do card de RPM agora é um gradiente */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .main-telemetry-card .gauge-container {
+            width: 100%;
+            max-width: 180px;
+            height: 130px;
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-telemetry-card .rpm-value-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 0.3rem;
+            text-shadow: 0 0 7px rgba(255, 255, 255, 0.8);
+        }
+
+        .main-telemetry-card .rpm-value-display .unit {
+            font-size: 1.2rem;
+            color: #FFFF00;
+            text-shadow: 0 0 5px rgba(255, 255, 0, 0.7);
+        }
+
+        /* Estilo para o card de tendência de dados */
+        .data-trend-card {
+            background: linear-gradient(to right, #100c14, #18141c);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .data-trend-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+        .trend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            padding: 0.3rem 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+        .trend-item:last-child {
+            border-bottom: none;
+        }
+        .trend-label {
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+        .trend-indicator {
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: color 0.3s ease-in-out;
+        }
+        .trend-up { color: #00ff00; } /* Verde para cima */
+        .trend-down { color: #ff0000; } /* Vermelho para baixo */
+        .trend-stable { color: #a0aec0; } /* Cinza para estável */
+
+
+        /* Estilos para o card do gráfico */
+        .chart-card {
+            background: linear-gradient(to right, #100c14, #18141c);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+        }
+
+        .sensor-selector {
+            background-color: #3b4047;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.4rem;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            outline: none;
+            text-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .telemetry-chart-svg {
+            width: 100%;
+            height: 180px;
+        }
+        .telemetry-chart-svg .domain,
+        .telemetry-chart-svg .tick line {
+            stroke: #4a5568;
+        }
+        .telemetry-chart-svg .tick text {
+            fill: #a0aec0;
+            font-size: 0.7rem;
+        }
+
+        /* Contêiner para o único gráfico (em coluna simples) */
+        .charts-grid-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        /* Nova classe para a linha inferior de sensores */
+        .dashboard-bottom-row-sensors {
+            display: flex;
+            flex-direction: column; /* Empilha em telas pequenas */
+            align-items: center;
+            gap: 2rem;
+            padding: 0.5rem;
+            width: 100%;
+        }
+        @media (min-width: 1024px) {
+            .dashboard-bottom-row-sensors {
+                flex-direction: row; /* Volta a ser row para o layout de colunas */
+                align-items: flex-start;
+                justify-content: center; /* Centraliza o conteúdo horizontalmente */
+            }
+        }
+
+        /* Estilos aprimorados para o recording-card */
+        .recording-card {
+            background: linear-gradient(to bottom right, #2a2c30, #1a1e22); /* Gradiente mais suave */
+            padding: 1.5rem; /* Aumentado o preenchimento */
+            border-radius: 1rem; /* Cantos mais arredondados */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra mais pronunciada */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem; /* Espaçamento entre elementos internos */
+            width: 100%;
+            max-width: 300px; /* Limita a largura para não ficar muito grande */
+            border: 1px solid rgba(255, 255, 255, 0.05); /* Borda sutil */
+        }
+        /* Adicionado para aumentar a altura vertical do card de gravação */
+        @media (min-width: 1024px) {
+            .recording-card {
+                min-height: 19.5rem; /* Aumentado para 24.84rem */
+            }
+        }
+
+        .recording-title {
+            font-size: 1.2rem; /* Tamanho do título aumentado */
+            font-weight: 700; /* Mais negrito */
+            color: #63b3ed; /* Azul claro para destaque */
+            text-shadow: 0 0 8px rgba(99, 179, 237, 0.6); /* Brilho azul */
+            margin-bottom: 0.5rem;
+        }
+
+        .recording-status-message {
+            font-size: 1rem; /* Tamanho da fonte ajustado */
+            color: #a0aec0; /* Cor cinza claro */
+            text-shadow: 0 0 2px rgba(160, 174, 192, 0.2);
+            min-height: 24px; /* Garante que a altura não mude muito com o texto */
+            text-align: center;
+        }
+
+        .recording-button {
+            background: linear-gradient(to right, #4a5568, #63b3ed); /* Gradiente nos botões */
+            color: #ffffff;
+            border: none;
+            border-radius: 0.75rem; /* Cantos mais arredondados */
+            padding: 0.75rem 1.5rem; /* Aumentado o preenchimento */
+            cursor: pointer;
+            font-size: 1rem; /* Tamanho da fonte aumentado */
+            font-weight: 600;
+            transition: all 0.3s ease; /* Transição suave para todas as propriedades */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra para os botões */
+            letter-spacing: 0.05em; /* Espaçamento entre letras */
+        }
+
+        .recording-button:hover {
+            background: linear-gradient(to right, #63b3ed, #4a5568); /* Inverte o gradiente no hover */
+            transform: translateY(-2px); /* Efeito de "levantar" */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra mais forte no hover */
+        }
+
+        .recording-button.recording {
+            background: linear-gradient(to right, #ff0000, #cc0000); /* Gradiente vermelho para gravação */
+            box-shadow: 0 4px 6px rgba(255, 0, 0, 0.4); /* Sombra vermelha */
+        }
+
+        .recording-button.recording:hover {
+            background: linear-gradient(to right, #cc0000, #ff0000); /* Inverte o gradiente vermelho no hover */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 0, 0, 0.6);
+        }
+
+        .export-button {
+            background: linear-gradient(to right, #008000, #006400); /* Gradiente verde para exportar */
+            margin-top: 0.5rem; /* Espaçamento entre os botões */
+        }
+
+        .export-button:hover {
+            background: linear-gradient(to right, #006400, #008000); /* Inverte o gradiente verde no hover */
+        }
+
+        /* Estilo para o botão de exportar desabilitado */
+        .export-button:disabled {
+            background: linear-gradient(to right, #555, #777); /* Tons de cinza */
+            cursor: not-allowed;
+            box-shadow: none;
+            text-shadow: none;
+            opacity: 0.6; /* Levemente transparente */
+        }
+
+        .export-button:disabled:hover {
+            transform: none; /* Remove o efeito de levantar */
+            box-shadow: none; /* Remove a sombra no hover */
+        }
+
+        /* Nova classe para o contêiner do botão "Ver Outros Gráficos" */
+        .other-graphs-button-container {
+            /* Você pode ajustar estas propriedades para controlar a altura e o espaçamento */
+            margin-top: 0rem; /* Exemplo: Adiciona um espaçamento superior */
+            padding-top: 0.5rem; /* Exemplo: Adiciona um preenchimento interno superior */
+            /* height: 5rem; */ /* Exemplo: Define uma altura fixa para o contêiner */
+        }
+
+        /* Estilo para a mensagem de aviso */
+        .warning-message {
+            background-color: #ef4444; /* Vermelho */
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            display: none; /* Inicialmente oculto */
+            position: fixed; /* Fixa na tela */
+            top: 1rem; /* Perto do topo */
+            left: 50%; /* Centraliza horizontalmente */
+            transform: translateX(-50%); /* Ajuste para centralização perfeita */
+            z-index: 1000; /* Garante que fique acima de outros elementos */
+            width: 90%; /* Largura responsiva */
+            max-width: 400px; /* Limite de largura */
+            animation: fadeInOut 4s forwards; /* Animação para aparecer e desaparecer */
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+    </style>
+</head>
+<body class="p-2 sm:p-4 lg:p-6">
+    <div class="py-8">
+        <div class="top-center-logo">
+            <img src="/static/images/fsaeunicamp_logo.png" alt="Logo da Equipe FSAE">
+        </div>
+        <div id="warningMessage" class="warning-message">
+            </div>
+        <div class="main-layout">
+            <div class="dashboard-left-column">
+                <div id="chart-card-1" class="chart-card">
+                    <h3 class="chart-title">Histórico de <span id="currentSensorChartTitle-1">Velocidade</span></h3>
+                    <select id="sensorSelector-1" class="sensor-selector">
+                        <option value="Velocidade">Velocidade</option>
+                        <option value="RPM">RPM</option>
+                        <option value="TempMotor">Temperatura do Motor</option>
+                        <option value="TPS">TPS</option>
+                    </select>
+                    <svg id="telemetryChart-1" class="telemetry-chart-svg"></svg>
+                </div>
+            </div>
+
+            <div class="dashboard-center-column">
+                <div class="main-telemetry-card">
+                    </div>
+            </div>
+            
+            <div class="dashboard-right-column">
+                <div id="dataTrendCard" class="data-trend-card">
+                    <h3>Tendência de Dados</h3>
+                    <div class="trend-item"><span class="trend-label">Velocidade:</span><span id="VelocidadeTrend" class="trend-indicator">--</span></div>
+                    <div class="trend-item"><span class="trend-label">Temp. Motor:</span><span id="TempMotorTrend" class="trend-indicator">--</span></div>
+                    <div class="trend-item"><span class="trend-label">Pressão Óleo:</span><span id="PressOleoTrend" class="trend-indicator">--</span></div>
+                    <div class="trend-item"><span class="trend-label">Bateria ECU:</span><span id="TensaoBateriaTrend" class="trend-indicator">--</span></div>
+                </div>
+            </div>
+
+            <div class="dashboard-bottom-left-block">
+                <div class="recording-card">
+                    <h3 class="recording-title">Controle da Telemetria</h3>
+                    <p id="telemetryStatus" class="recording-status-message">Verificando status...</p>
+                    <button id="telemetryControlButton" class="recording-button">INICIAR TELEMETRIA</button>
+                </div>
+                <div class="flex justify-center w-full">
+                    <button onclick="window.open('/all_graphs', '_blank');" class="recording-button">Ver Todos os Gráficos</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-bottom-right-block">
+                <div class="data-panel">
+                    <div class="data-card"><div class="data-label">Velocidade</div><div class="data-value" id="VelocidadeValue"><span id="Velocidade">0</span><span class="unit">km/h</span></div></div>
+                    <div class="data-card"><div class="data-label">TPS</div><div class="data-value" id="TPSValue"><span id="TPS">0</span><span class="unit">%</span></div></div>
+                    <div class="data-card"><div class="data-label">Temp. Motor</div><div class="data-value" id="TempMotorValue"><span id="TempMotor">0</span><span class="unit">°C</span></div></div>
+                    <div class="data-card"><div class="data-label">MAP</div><div class="data-value" id="MAPValue"><span id="MAP">0</span><span class="unit">kPa</span></div></div>
+                    <div class="data-card"><div class="data-label">Bateria ECU</div><div class="data-value" id="TensaoBateriaValue"><span id="TensaoBateria">0</span><span class="unit">V</span></div></div>
+                    <div class="data-card"><div class="data-label">Pressão Óleo</div><div class="data-value" id="PressOleoValue"><span id="PressOleo">0.0</span><span class="unit">bar</span></div></div>
+                </div>
+            </div>
+
+            <div class="dashboard-bottom-far-right-block">
+                <div class="recording-card">
+                    <h3 class="recording-title">Gravação de Dados</h3>
+                    <p id="recordingStatus" class="recording-status-message">Telemetria parada</p>
+                    <button id="recordButton" class="recording-button" disabled>Iniciar Gravação</button>
+                    <button id="exportButton" class="recording-button export-button" disabled>Exportar CSV</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // =======================================================================
+    //                     JAVASCRIPT - FRONTEND COMPLETO
+    // =======================================================================
+    const API_BASE_URL = "http://127.0.0.1:8000/api";
+    
+    // --- Variáveis de Estado ---
+    let isTelemetryActive = false;
+    let isRecording = false;
+    let recordedData = [];
+    let latestDataSnapshot = {};
+
+    const SENSOR_ELEMENT_IDS = ["RPM", "MAP", "TempMotor", "PressOleo", "PressCombustivel", "TensaoBateria", "Estercamento", "ForcaG", "Velocidade", "TPS", "PressFreio", "CursoSuspensao", "Marcha", "Sonda", "TempInjecao"];
+    const sensorHistory = {};
+    SENSOR_ELEMENT_IDS.forEach(id => sensorHistory[id] = []);
+    const MAX_HISTORY_POINTS = 50;
+    const TREND_CHECK_POINTS = 10;
+    
+    // Limites para cores dinâmicas
+    const thresholds = { "TempMotor": { max: 110 }, "TensaoBateria": { min: 12.0 }, "PressOleo": { min: 1.0 } };
+
+    // --- FUNÇÕES DE API (Comunicação com o Backend FastAPI) ---
+
+    async function fetchStatus() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/status`);
+            const data = await response.json();
+            isTelemetryActive = data.rodando;
+            updateStatusIndicators();
+        } catch (error) {
+            console.error("Erro ao buscar status:", error);
+            isTelemetryActive = false;
+            updateStatusIndicators();
+        }
+    }
+
+    async function toggleTelemetry() {
+        const endpoint = isTelemetryActive ? '/stop' : '/start';
+        document.getElementById('telemetryControlButton').disabled = true;
+        try {
+            await fetch(API_BASE_URL + endpoint, { method: 'POST' });
+        } finally {
+            await fetchStatus();
+            document.getElementById('telemetryControlButton').disabled = false;
+        }
+    }
+
+    async function fetchLiveData() {
+        if (!isTelemetryActive) return;
+        try {
+            const response = await fetch(`${API_BASE_URL}/dados_live`);
+            const data = await response.json();
+            if (data.length > 0) {
+                latestDataSnapshot = data[0];
+                updateDashboardUI(latestDataSnapshot);
+                updateHistory(data);
+                drawChart('telemetryChart-1', document.getElementById('sensorSelector-1').value);
+                updateAllTrends();
+                checkWarnings(latestDataSnapshot);
+                if (isRecording) {
+                    recordedData.push(latestDataSnapshot);
+                }
+            }
+        } catch (error) { console.error("Erro ao buscar dados ao vivo:", error); }
+    }
+    
+    // --- FUNÇÕES DE ATUALIZAÇÃO DA UI (VISUAL) ---
+
+    function updateStatusIndicators() {
+        const telemetryStatusEl = document.getElementById('telemetryStatus');
+        const telemetryButtonEl = document.getElementById('telemetryControlButton');
+        const recordStatusEl = document.getElementById('recordingStatus');
+        const recordButtonEl = document.getElementById('recordButton');
+        const exportButtonEl = document.getElementById('exportButton');
+
+        if (isTelemetryActive) {
+            telemetryStatusEl.innerHTML = '<span class="text-green-400 font-bold">TELEMETRIA ATIVA</span>';
+            telemetryButtonEl.textContent = 'Parar Telemetria';
+            telemetryButtonEl.classList.add('recording');
+            recordButtonEl.disabled = false;
+            if (!isRecording) recordStatusEl.textContent = 'Pronto para gravar';
+        } else {
+            telemetryStatusEl.innerHTML = '<span class="text-red-400 font-bold">TELEMETRIA PARADA</span>';
+            telemetryButtonEl.textContent = 'Iniciar Telemetria';
+            telemetryButtonEl.classList.remove('recording');
+            
+            if(isRecording) toggleRecording(); // Para a gravação se a telemetria for parada
+            recordButtonEl.disabled = true;
+            recordStatusEl.textContent = 'Telemetria parada';
+            exportButtonEl.disabled = recordedData.length === 0;
+        }
+    }
+    
+    function updateDashboardUI(data) {
+        SENSOR_ELEMENT_IDS.forEach(sensorId => {
+            const element = document.getElementById(sensorId);
+            if (element && data[sensorId] !== undefined && data[sensorId] !== null) {
+                const value = parseFloat(data[sensorId]);
+                element.textContent = (Number.isInteger(value)) ? value : value.toFixed(1);
+            }
+        });
+        const rpm = parseInt(data.RPM || 0);
+        document.getElementById('RPM_main').textContent = rpm;
+        updateRpmGauge(rpm);
+        updateDynamicColors(data);
+    }
+    
+    function updateHistory(allData) {
+        SENSOR_ELEMENT_IDS.forEach(id => sensorHistory[id] = []);
+        allData.reverse().forEach(packet => {
+            SENSOR_ELEMENT_IDS.forEach(id => {
+                if (packet[id] !== undefined && packet[id] !== null) sensorHistory[id].push(packet[id]);
+            });
+        });
+    }
+
+    function updateDynamicColors(data) {
+        const tempValue = data.TempMotor;
+        const tempEl = document.getElementById('TempMotorValue');
+        if (tempEl && tempValue !== undefined) {
+             tempEl.style.color = tempValue > thresholds.TempMotor.max ? '#ff0000' : '#ffffff';
+        }
+        
+        const voltValue = data.TensaoBateria;
+        const voltEl = document.getElementById('TensaoBateriaValue');
+        if (voltEl && voltValue !== undefined) {
+             voltEl.style.color = voltValue < thresholds.TensaoBateria.min ? '#ff0000' : '#ffffff';
+        }
+        
+        const oilValue = data.PressOleo;
+        const oilEl = document.getElementById('PressOleoValue');
+        if (oilEl && oilValue !== undefined) {
+             oilEl.style.color = oilValue < thresholds.PressOleo.min ? '#ff0000' : '#ffffff';
+        }
+    }
+
+    let lastKnownTemperatures = [];
+    function checkWarnings(data) {
+        const tempValue = data.TempMotor;
+        if (tempValue === null || tempValue === undefined) return;
+        
+        lastKnownTemperatures.push(tempValue);
+        if (lastKnownTemperatures.length > 5) lastKnownTemperatures.shift();
+        
+        if (lastKnownTemperatures.length > 1) {
+            const tempDrop = lastKnownTemperatures[0] - tempValue;
+            if (tempDrop > 10) { // Queda de mais de 10 graus
+                const warningMsg = document.getElementById('warningMessage');
+                warningMsg.textContent = '⚠️ Atenção: Temperatura do Motor caiu drasticamente!';
+                warningMsg.style.display = 'block';
+                setTimeout(() => { warningMsg.style.display = 'none'; }, 4000);
+                lastKnownTemperatures = [tempValue]; // Reseta o histórico após o aviso
+            }
+        }
+    }
+
+    function updateDataTrend(sensorName, elementId) {
+        const history = sensorHistory[sensorName] || [];
+        const el = document.getElementById(elementId);
+        if (!el || history.length < TREND_CHECK_POINTS) {
+            if (el) el.textContent = '--';
+            return;
+        }
+
+        const recentData = history.slice(-TREND_CHECK_POINTS);
+        const average = recentData.reduce((a, b) => a + b, 0) / recentData.length;
+        const latestValue = recentData[recentData.length - 1];
+
+        el.classList.remove('trend-up', 'trend-down', 'trend-stable');
+        if (latestValue > average * 1.05) { // 5% acima da média recente
+            el.textContent = '⬆️';
+            el.classList.add('trend-up');
+        } else if (latestValue < average * 0.95) { // 5% abaixo da média recente
+            el.textContent = '⬇️';
+            el.classList.add('trend-down');
+        } else {
+            el.textContent = '➡️';
+            el.classList.add('trend-stable');
+        }
+    }
+    
+    function updateAllTrends() {
+        updateDataTrend('Velocidade', 'VelocidadeTrend');
+        updateDataTrend('TempMotor', 'TempMotorTrend');
+        updateDataTrend('PressOleo', 'PressOleoTrend');
+        updateDataTrend('TensaoBateria', 'TensaoBateriaTrend');
+    }
+
+    // --- FUNÇÕES DE GRAVAÇÃO E EXPORTAÇÃO ---
+    
+    function toggleRecording() {
+        if (!isTelemetryActive) return;
+        isRecording = !isRecording;
+        const recordButton = document.getElementById('recordButton');
+        const recordingStatus = document.getElementById('recordingStatus');
+        const exportButton = document.getElementById('exportButton');
+
+        if (isRecording) {
+            recordedData = [];
+            recordButton.textContent = 'Parar Gravação';
+            recordButton.classList.add('recording');
+            recordingStatus.textContent = 'Gravando...';
+            exportButton.disabled = true;
+        } else {
+            recordButton.textContent = 'Iniciar Gravação';
+            recordButton.classList.remove('recording');
+            recordingStatus.textContent = `Gravação concluída (${recordedData.length} pontos)`;
+            exportButton.disabled = recordedData.length === 0;
+        }
+    }
+
+    function exportCsv() {
+        if (recordedData.length === 0) return;
+        const headers = Object.keys(recordedData[0]);
+        let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n";
+        recordedData.forEach(row => {
+            const values = headers.map(header => row[header]);
+            csvContent += values.join(",") + "\n";
+        });
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `telemetria_sessao_${new Date().toISOString()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    
+    // --- FUNÇÕES DE GRÁFICO (D3.js - Cole as suas funções completas aqui) ---
+    function updateRpmGauge(rpm) { /* ... Cole a função do seu código antigo ... */ }
+    function drawChart(chartId, sensorType) { /* ... Cole a função do seu código antigo ... */ }
+
+    // --- INICIALIZAÇÃO E EVENT LISTENERS ---
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('telemetryControlButton').addEventListener('click', toggleTelemetry);
+        document.getElementById('recordButton').addEventListener('click', toggleRecording);
+        document.getElementById('exportButton').addEventListener('click', exportCsv);
+        document.getElementById('sensorSelector-1').addEventListener('change', (event) => {
+            drawChart('telemetryChart-1', event.target.value);
+        });
+
+        fetchStatus();
+        setInterval(fetchLiveData, 2000);
+        setInterval(fetchStatus, 5000);
+    });
+
+</script>
+</body>
+</html>

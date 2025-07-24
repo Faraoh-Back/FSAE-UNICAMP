@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos os Gráficos de Telemetria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(to right, #100c14, #18141c); 
+            color: #ffffff; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+            padding: 1rem; 
+        }
+        .charts-full-page-container { display: grid; grid-template-columns: repeat(1, 1fr); gap: 2rem; max-width: 1400px; margin: 0 auto; padding: 1rem; }
+        @media (min-width: 1024px) { .charts-full-page-container { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1536px) { .charts-full-page-container { grid-template-columns: repeat(3, 1fr); } }
+        .chart-card { background: linear-gradient(to right, #100c14, #18141c); padding: 1.5rem; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); display: flex; flex-direction: column; align-items: center; gap: 0.8rem; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .chart-title { font-size: 1.1rem; font-weight: 600; color: #ffffff; text-shadow: 0 0 3px rgba(255, 255, 255, 0.5); }
+        .telemetry-chart-svg { width: 100%; height: 250px; }
+        .telemetry-chart-svg .domain, .telemetry-chart-svg .tick line { stroke: #4a5568; }
+        .telemetry-chart-svg .tick text { fill: #a0aec0; font-size: 0.7rem; }
+    </style>
+</head>
+<body>
+    <h1 class="text-3xl font-bold text-center mb-8">Gráficos Detalhados de Telemetria</h1>
+    <div id="charts-grid-container" class="charts-full-page-container">
+        </div>
+
+<script>
+    const API_BASE_URL = "http://127.0.0.1:8000/api";
+    
+    // Lista de todos os sensores para os quais queremos criar gráficos
+    const ALL_SENSORS = [
+        "RPM", "Velocidade", "TPS", "MAP", "TempMotor", "TensaoBateria", 
+        "PressOleo", "PressCombustivel", "Marcha", "Sonda", "TempInjecao",
+        "Estercamento", "ForcaG", "PressFreio", "CursoSuspensao"
+    ];
+
+    const sensorHistory = {};
+    ALL_SENSORS.forEach(id => sensorHistory[id] = []);
+    const MAX_HISTORY_POINTS = 100;
+
+    // --- FUNÇÕES DE API ---
+    async function fetchAllData() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/dados_live?limit=100`); // Pega 100 pontos
+            const data = await response.json();
+            updateHistory(data);
+            redrawAllCharts();
+        } catch (error) {
+            console.error("Erro ao buscar dados para gráficos:", error);
+        }
+    }
+
+    // --- FUNÇÕES DE UI ---
+    function updateHistory(allData) {
+        ALL_SENSORS.forEach(id => sensorHistory[id] = []);
+        allData.reverse().forEach(packet => {
+            ALL_SENSORS.forEach(id => {
+                if (packet[id] !== undefined) {
+                    sensorHistory[id].push(packet[id]);
+                }
+            });
+        });
+    }
+
+    function redrawAllCharts() {
+        ALL_SENSORS.forEach(sensor => {
+            drawChart(`telemetryChart-${sensor}`, sensor);
+        });
+    }
+
+    // --- FUNÇÃO DE GRÁFICO (D3.js) ---
+    function drawChart(chartId, sensorType) {
+        const data = sensorHistory[sensorType] || [];
+        const svgElement = d3.select(`#${chartId}`);
+        if (svgElement.empty()) return; // Não faz nada se o elemento não existe
+        svgElement.selectAll("*").remove();
+
+        const margin = {top: 20, right: 20, bottom: 20, left: 40};
+        const width = svgElement.node().getBoundingClientRect().width - margin.left - margin.right;
+        const height = svgElement.node().getBoundingClientRect().height - margin.top - margin.bottom;
+
+        const x = d3.scaleLinear().range([0, width]);
+        const y = d3.scaleLinear().range([height, 0]);
+
+        const line = d3.line().x((d, i) => x(i)).y(d => y(d));
+
+        const g = svgElement.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+        x.domain([0, Math.max(MAX_HISTORY_POINTS - 1, data.length - 1)]);
+        const dataMin = d3.min(data);
+        const dataMax = d3.max(data);
+        y.domain([dataMin !== undefined ? dataMin * 0.95 : 0, dataMax !== undefined ? dataMax * 1.05 : 100]);
+        
+        g.append("g").attr("class", "axis axis--y").call(d3.axisLeft(y).ticks(5));
+        
+        g.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", "#63b3ed")
+            .attr("stroke-width", 2.5)
+            .attr("d", line);
+    }
+    
+    // --- INICIALIZAÇÃO ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('charts-grid-container');
+        // Cria dinamicamente os cards dos gráficos
+        ALL_SENSORS.forEach(sensor => {
+            const card = document.createElement('div');
+            card.className = 'chart-card';
+            card.innerHTML = `
+                <h3 class="chart-title">${sensor}</h3>
+                <svg id="telemetryChart-${sensor}" class="telemetry-chart-svg"></svg>
+            `;
+            container.appendChild(card);
+        });
+
+        // Busca os dados e desenha os gráficos
+        fetchAllData();
+        setInterval(fetchAllData, 2000); // Atualiza a cada 2 segundos
+        
+        window.addEventListener('resize', redrawAllCharts);
+    });
+</script>
+</body>
+</html>
