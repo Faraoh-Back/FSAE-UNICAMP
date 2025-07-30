@@ -14,7 +14,7 @@ from dash.dependencies import Input, Output, State
 import plotly.express as px
 import glob
 from dash.dash_table.Format import Format
-from pathlib import Path # Adicionado
+from pathlib import Path 
 
 lock = threading.Lock()
 df_new = pd.DataFrame(columns = ['Load Cell', 'Weight', 'Mean', 'interval'])  
@@ -198,7 +198,7 @@ app.layout = html.Div(
                         html.Div(
                             style={'display': 'flex', 'justifyContent': 'space-around', 'marginTop': '10px'},
                             children=[
-                                html.Div(id='fl', 
+                                html.Div(id='fr', 
                                          style={
                                                 'position': 'absolute',
                                                 'top': '180px',
@@ -212,7 +212,7 @@ app.layout = html.Div(
                                                 'alignItems': 'center',
                                                 'justifyContent': 'center'
                                          }),
-                                html.Div(id='fr', 
+                                html.Div(id='rr', 
                                          style={
                                                 'position': 'absolute',
                                                 'top': '180px',
@@ -227,7 +227,7 @@ app.layout = html.Div(
                                                 'justifyContent': 'center'
                                             },
                                          ),
-                                html.Div(id='rl', 
+                                html.Div(id='fl', 
                                          style={
                                                 'position': 'absolute',
                                                 'top': '520px',
@@ -242,7 +242,7 @@ app.layout = html.Div(
                                                 'justifyContent': 'center'
                                             },
                                          ),
-                                html.Div(id='rr', 
+                                html.Div(id='rl', 
                                          style={
                                                 'position': 'absolute',
                                                 'top': '520px',
